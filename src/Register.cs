@@ -1,22 +1,35 @@
-﻿namespace GBEmmy
+﻿// GBEmmy
+// Copyright (C) 2014 Tim Potze
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+// 
+// For more information, please refer to <http://unlicense.org>
+
+namespace GBEmmy
 {
     public class Register
     {
-        public byte A { get; set; }
-        public byte B { get; set; }
-        public byte C { get; set; }
-        public byte D { get; set; }
-        public byte E { get; set; }
-        public byte H { get; set; }
-        public byte L { get; set; }
-        public Flags Flags { get; set; }
+        public byte A;
+        public byte B;
+        public byte C;
+        public byte D;
+        public byte E;
+        public Flags Flags;
+        public byte H;
+        public byte L;
+        public short M;
 
-        public short PC { get; set; }
-        public short SP { get; set; }
+        public short PC;
+        public short SP;
 
         //instruction time
-        public short M { get; set; }
-        public short T { get; set; }
+        public short T;
 
         public void Reset()
         {
