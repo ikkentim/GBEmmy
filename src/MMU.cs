@@ -28,6 +28,7 @@ namespace GBEmmy
             get { return ReadByte((high << 8) | low); }
             set { WriteByte((high << 8) | low, value); }
         }
+
         public byte this[int addr]
         {
             get { return ReadByte(addr); }

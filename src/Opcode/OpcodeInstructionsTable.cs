@@ -1,4 +1,17 @@
-﻿namespace GBEmmy.Opcode
+﻿// GBEmmy
+// Copyright (C) 2014 Tim Potze
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+// 
+// For more information, please refer to <http://unlicense.org>
+
+namespace GBEmmy.Opcode
 {
     public static class OpcodeInstructionsTable
     {
@@ -22,7 +35,6 @@
             new OpcodeInstruction("RRC L", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("RRC (HL)", "Z 0 0 C", 2, 16),
             new OpcodeInstruction("RRC A", "Z 0 0 C", 2, 8),
-
             new OpcodeInstruction("RL B", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("RL C", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("RL D", "Z 0 0 C", 2, 8),
@@ -39,7 +51,6 @@
             new OpcodeInstruction("RR L", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("RR (HL)", "Z 0 0 C", 2, 16),
             new OpcodeInstruction("RR A", "Z 0 0 C", 2, 8),
-
             new OpcodeInstruction("SLA B", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("SLA C", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("SLA D", "Z 0 0 C", 2, 8),
@@ -56,7 +67,6 @@
             new OpcodeInstruction("SRA L", "Z 0 0 0", 2, 8),
             new OpcodeInstruction("SRA (HL)", "Z 0 0 0", 2, 16),
             new OpcodeInstruction("SRA A", "Z 0 0 0", 2, 8),
-
             new OpcodeInstruction("SWAP B", "Z 0 0 0", 2, 8),
             new OpcodeInstruction("SWAP C", "Z 0 0 0", 2, 8),
             new OpcodeInstruction("SWAP D", "Z 0 0 0", 2, 8),
@@ -73,7 +83,6 @@
             new OpcodeInstruction("SRL L", "Z 0 0 C", 2, 8),
             new OpcodeInstruction("SRL (HL)", "Z 0 0 C", 2, 16),
             new OpcodeInstruction("SRL A", "Z 0 0 C", 2, 8),
-
             new OpcodeInstruction("BIT 0,B", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 0,C", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 0,D", "Z 0 1 -", 2, 8),
@@ -90,7 +99,6 @@
             new OpcodeInstruction("BIT 1,L", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 1,(HL)", "Z 0 1 -", 2, 16),
             new OpcodeInstruction("BIT 1,A", "Z 0 1 -", 2, 8),
-
             new OpcodeInstruction("BIT 2,B", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 2,C", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 2,D", "Z 0 1 -", 2, 8),
@@ -107,7 +115,6 @@
             new OpcodeInstruction("BIT 3,L", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 3,(HL)", "Z 0 1 -", 2, 16),
             new OpcodeInstruction("BIT 3,A", "Z 0 1 -", 2, 8),
-
             new OpcodeInstruction("BIT 4,B", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 4,C", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 4,D", "Z 0 1 -", 2, 8),
@@ -124,7 +131,6 @@
             new OpcodeInstruction("BIT 5,L", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 5,(HL)", "Z 0 1 -", 2, 16),
             new OpcodeInstruction("BIT 5,A", "Z 0 1 -", 2, 8),
-
             new OpcodeInstruction("BIT 6,B", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 6,C", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 6,D", "Z 0 1 -", 2, 8),
@@ -141,7 +147,6 @@
             new OpcodeInstruction("BIT 7,L", "Z 0 1 -", 2, 8),
             new OpcodeInstruction("BIT 7,(HL)", "Z 0 1 -", 2, 16),
             new OpcodeInstruction("BIT 7,A", "Z 0 1 -", 2, 8),
-
             new OpcodeInstruction("RES 0,B", "- - - -", 2, 8),
             new OpcodeInstruction("RES 0,C", "- - - -", 2, 8),
             new OpcodeInstruction("RES 0,D", "- - - -", 2, 8),
@@ -158,7 +163,6 @@
             new OpcodeInstruction("RES 1,L", "- - - -", 2, 8),
             new OpcodeInstruction("RES 1,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("RES 1,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("RES 2,B", "- - - -", 2, 8),
             new OpcodeInstruction("RES 2,C", "- - - -", 2, 8),
             new OpcodeInstruction("RES 2,D", "- - - -", 2, 8),
@@ -175,7 +179,6 @@
             new OpcodeInstruction("RES 3,L", "- - - -", 2, 8),
             new OpcodeInstruction("RES 3,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("RES 3,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("RES 4,B", "- - - -", 2, 8),
             new OpcodeInstruction("RES 4,C", "- - - -", 2, 8),
             new OpcodeInstruction("RES 4,D", "- - - -", 2, 8),
@@ -192,7 +195,6 @@
             new OpcodeInstruction("RES 5,L", "- - - -", 2, 8),
             new OpcodeInstruction("RES 5,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("RES 5,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("RES 6,B", "- - - -", 2, 8),
             new OpcodeInstruction("RES 6,C", "- - - -", 2, 8),
             new OpcodeInstruction("RES 6,D", "- - - -", 2, 8),
@@ -209,7 +211,6 @@
             new OpcodeInstruction("RES 7,L", "- - - -", 2, 8),
             new OpcodeInstruction("RES 7,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("RES 7,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("SET 0,B", "- - - -", 2, 8),
             new OpcodeInstruction("SET 0,C", "- - - -", 2, 8),
             new OpcodeInstruction("SET 0,D", "- - - -", 2, 8),
@@ -226,7 +227,6 @@
             new OpcodeInstruction("SET 1,L", "- - - -", 2, 8),
             new OpcodeInstruction("SET 1,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("SET 1,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("SET 2,B", "- - - -", 2, 8),
             new OpcodeInstruction("SET 2,C", "- - - -", 2, 8),
             new OpcodeInstruction("SET 2,D", "- - - -", 2, 8),
@@ -243,7 +243,6 @@
             new OpcodeInstruction("SET 3,L", "- - - -", 2, 8),
             new OpcodeInstruction("SET 3,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("SET 3,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("SET 4,B", "- - - -", 2, 8),
             new OpcodeInstruction("SET 4,C", "- - - -", 2, 8),
             new OpcodeInstruction("SET 4,D", "- - - -", 2, 8),
@@ -260,7 +259,6 @@
             new OpcodeInstruction("SET 5,L", "- - - -", 2, 8),
             new OpcodeInstruction("SET 5,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("SET 5,A", "- - - -", 2, 8),
-
             new OpcodeInstruction("SET 6,B", "- - - -", 2, 8),
             new OpcodeInstruction("SET 6,C", "- - - -", 2, 8),
             new OpcodeInstruction("SET 6,D", "- - - -", 2, 8),
@@ -277,7 +275,6 @@
             new OpcodeInstruction("SET 7,L", "- - - -", 2, 8),
             new OpcodeInstruction("SET 7,(HL)", "- - - -", 2, 16),
             new OpcodeInstruction("SET 7,A", "- - - -", 2, 8)
-
         };
 
         #endregion
@@ -302,7 +299,6 @@
             new OpcodeInstruction("DEC C", "Z 1 H -", 1, 4),
             new OpcodeInstruction("LD C,d8", "- - - -", 2, 8),
             new OpcodeInstruction("RRCA", "0 0 0 C", 1, 4),
-
             new OpcodeInstruction("STOP 0", "- - - -", 2, 4),
             new OpcodeInstruction("LD DE,d16", "- - - -", 3, 12),
             new OpcodeInstruction("LD (DE),A", "- - - -", 1, 8),
@@ -319,7 +315,6 @@
             new OpcodeInstruction("DEC E", "Z 1 H -", 1, 4),
             new OpcodeInstruction("LD E,d8", "- - - -", 2, 8),
             new OpcodeInstruction("RRA", "0 0 0 C", 1, 4),
-
             new OpcodeInstruction("JR NZ,r8", "- - - -", 2, 12/8),
             new OpcodeInstruction("LD HL,d16", "- - - -", 3, 12),
             new OpcodeInstruction("LDI (HL),A", "- - - -", 1, 8),
@@ -336,7 +331,6 @@
             new OpcodeInstruction("DEC L", "Z 1 H -", 1, 4),
             new OpcodeInstruction("LD L,d8", "- - - -", 2, 8),
             new OpcodeInstruction("CPL", "- 1 1 -", 1, 4),
-
             new OpcodeInstruction("JR NC,r8", "- - - -", 2, 12/8),
             new OpcodeInstruction("LD SP,d16", "- - - -", 3, 12),
             new OpcodeInstruction("LDD (HL),A", "- - - -", 1, 8),
@@ -353,7 +347,6 @@
             new OpcodeInstruction("DEC A", "Z 1 H -", 1, 4),
             new OpcodeInstruction("LD A,d8", "- - - -", 2, 8),
             new OpcodeInstruction("CCF", "- 0 0 C", 1, 4),
-
             new OpcodeInstruction("LD B,B", "- - - -", 1, 4),
             new OpcodeInstruction("LD B,C", "- - - -", 1, 4),
             new OpcodeInstruction("LD B,D", "- - - -", 1, 4),
@@ -370,7 +363,6 @@
             new OpcodeInstruction("LD C,L", "- - - -", 1, 4),
             new OpcodeInstruction("LD C,(HL)", "- - - -", 1, 8),
             new OpcodeInstruction("LD C,A", "- - - -", 1, 4),
-
             new OpcodeInstruction("LD D,B", "- - - -", 1, 4),
             new OpcodeInstruction("LD D,C", "- - - -", 1, 4),
             new OpcodeInstruction("LD D,D", "- - - -", 1, 4),
@@ -387,7 +379,6 @@
             new OpcodeInstruction("LD E,L", "- - - -", 1, 4),
             new OpcodeInstruction("LD E,(HL)", "- - - -", 1, 8),
             new OpcodeInstruction("LD E,A", "- - - -", 1, 4),
-
             new OpcodeInstruction("LD H,B", "- - - -", 1, 4),
             new OpcodeInstruction("LD H,C", "- - - -", 1, 4),
             new OpcodeInstruction("LD H,D", "- - - -", 1, 4),
@@ -404,7 +395,6 @@
             new OpcodeInstruction("LD L,L", "- - - -", 1, 4),
             new OpcodeInstruction("LD L,(HL)", "- - - -", 1, 8),
             new OpcodeInstruction("LD L,A", "- - - -", 1, 4),
-
             new OpcodeInstruction("LD (HL),B", "- - - -", 1, 8),
             new OpcodeInstruction("LD (HL),C", "- - - -", 1, 8),
             new OpcodeInstruction("LD (HL),D", "- - - -", 1, 8),
@@ -421,7 +411,6 @@
             new OpcodeInstruction("LD A,L", "- - - -", 1, 4),
             new OpcodeInstruction("LD A,(HL)", "- - - -", 1, 8),
             new OpcodeInstruction("LD A,A", "- - - -", 1, 4),
-
             new OpcodeInstruction("ADD A,B", "Z 0 H C", 1, 4),
             new OpcodeInstruction("ADD A,C", "Z 0 H C", 1, 4),
             new OpcodeInstruction("ADD A,D", "Z 0 H C", 1, 4),
@@ -438,7 +427,6 @@
             new OpcodeInstruction("ADC A,L", "Z 0 H C", 1, 4),
             new OpcodeInstruction("ADC A,(HL)", "Z 0 H C", 1, 8),
             new OpcodeInstruction("ADC A,A", "Z 0 H C", 1, 4),
-
             new OpcodeInstruction("SUB B", "Z 1 H C", 1, 4),
             new OpcodeInstruction("SUB C", "Z 1 H C", 1, 4),
             new OpcodeInstruction("SUB D", "Z 1 H C", 1, 4),
@@ -455,7 +443,6 @@
             new OpcodeInstruction("SBC A,L", "Z 1 H C", 1, 4),
             new OpcodeInstruction("SBC A,(HL)", "Z 1 H C", 1, 8),
             new OpcodeInstruction("SBC A,A", "Z 1 H C", 1, 4),
-
             new OpcodeInstruction("AND B", "Z 0 1 0", 1, 4),
             new OpcodeInstruction("AND C", "Z 0 1 0", 1, 4),
             new OpcodeInstruction("AND D", "Z 0 1 0", 1, 4),
@@ -472,7 +459,6 @@
             new OpcodeInstruction("XOR L", "Z 0 0 0", 1, 4),
             new OpcodeInstruction("XOR (HL)", "Z 0 0 0", 1, 8),
             new OpcodeInstruction("XOR A", "Z 0 0 0", 1, 4),
-
             new OpcodeInstruction("OR B", "Z 0 0 0", 1, 4),
             new OpcodeInstruction("OR C", "Z 0 0 0", 1, 4),
             new OpcodeInstruction("OR D", "Z 0 0 0", 1, 4),
@@ -489,7 +475,6 @@
             new OpcodeInstruction("CP L", "Z 1 H C", 1, 4),
             new OpcodeInstruction("CP (HL)", "Z 1 H C", 1, 8),
             new OpcodeInstruction("CP A", "Z 1 H C", 1, 4),
-
             new OpcodeInstruction("RET NZ", "- - - -", 1, 20/8),
             new OpcodeInstruction("POP BC", "- - - -", 1, 12),
             new OpcodeInstruction("JP NZ,a16", "- - - -", 3, 16, 12),
@@ -506,7 +491,6 @@
             new OpcodeInstruction("CALL a16", "- - - -", 3, 24),
             new OpcodeInstruction("ADC A,d8", "Z 0 H C", 2, 8),
             new OpcodeInstruction("RST 08H", "- - - -", 1, 16),
-
             new OpcodeInstruction("RET NC", "- - - -", 1, 20/8),
             new OpcodeInstruction("POP DE", "- - - -", 1, 12),
             new OpcodeInstruction("JP NC,a16", "- - - -", 3, 16, 12),
@@ -523,7 +507,6 @@
             new OpcodeInstruction("EMPTY", "- - - -", 0, 0),
             new OpcodeInstruction("SBC A,d8", "Z 1 H C", 2, 8),
             new OpcodeInstruction("RST 18H", "- - - -", 1, 16),
-
             new OpcodeInstruction("LDH (a8),A", "- - - -", 2, 12),
             new OpcodeInstruction("POP HL", "- - - -", 1, 12),
             new OpcodeInstruction("LD (C),A", "- - - -", 2, 8),
@@ -540,7 +523,6 @@
             new OpcodeInstruction("EMPTY", "- - - -", 0, 0),
             new OpcodeInstruction("XOR d8", "Z 0 0 0", 2, 8),
             new OpcodeInstruction("RST 28H", "- - - -", 1, 16),
-
             new OpcodeInstruction("LDH A,(a8)", "- - - -", 2, 12),
             new OpcodeInstruction("POP AF", "Z N H C", 1, 12),
             new OpcodeInstruction("LD A,(C)", "- - - -", 2, 8),

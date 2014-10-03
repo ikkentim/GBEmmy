@@ -28,8 +28,10 @@ namespace GBEmmy
         public ushort SP;
 
         #region instruction time
+
         public ushort M;
         public ushort T;
+
         #endregion
 
         public void Reset()

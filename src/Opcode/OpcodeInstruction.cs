@@ -1,4 +1,17 @@
-﻿using System;
+﻿// GBEmmy
+// Copyright (C) 2014 Tim Potze
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+// 
+// For more information, please refer to <http://unlicense.org>
+
+using System;
 using System.Linq;
 using GBEmmy.Opcode.Operation;
 
@@ -6,12 +19,6 @@ namespace GBEmmy.Opcode
 {
     public struct OpcodeInstruction
     {
-        public ushort Duration { get; set; }
-        public ushort ConditionalDuration { get; set; }
-
-        public Operand Operand1 { get; set; }
-        public Operand Operand2 { get; set; }
-
         public OpcodeInstruction(string description, string flagModifiers, ushort length, ushort duration,
             ushort conditionalDuration = 0)
             : this()
@@ -23,24 +30,24 @@ namespace GBEmmy.Opcode
 
 
             //operation
-            var oParts = description.Split(' ');
-            var @operator = oParts[0];
-            var operands = oParts.Length == 1 ? new string[0] : oParts[1].Split(',');
+            string[] oParts = description.Split(' ');
+            string @operator = oParts[0];
+            string[] operands = oParts.Length == 1 ? new string[0] : oParts[1].Split(',');
 
             var operators = new IOperation[]
             {
                 new NopOperation(),
-                new EmptyOperation(), 
+                new EmptyOperation(),
                 new LdOperation(),
-                new RlcOperation(), 
-                new RrcOperation(), 
-                new RlOperation(), 
-                new RrOperation(), 
-                new SlaOperation(), 
-                new SraOperation(), 
+                new RlcOperation(),
+                new RrcOperation(),
+                new RlOperation(),
+                new RrOperation(),
+                new SlaOperation(),
+                new SraOperation()
             };
 
-            var operation = operators.FirstOrDefault(
+            IOperation operation = operators.FirstOrDefault(
                 o => o.GetType().Name.Substring(0, o.GetType().Name.Length - "Operation".Length).ToUpper() == @operator);
 
             if (operation == null) throw new Exception(string.Format("Opcode {0} has no operation", description));
@@ -48,8 +55,13 @@ namespace GBEmmy.Opcode
             //operands
             if (operands.Length >= 1) Operand1 = GetOperandByName(operands[0]);
             if (operands.Length >= 2) Operand2 = GetOperandByName(operands[1]);
-
         }
+
+        public ushort Duration { get; set; }
+        public ushort ConditionalDuration { get; set; }
+
+        public Operand Operand1 { get; set; }
+        public Operand Operand2 { get; set; }
 
         private static Operand GetOperandByName(string name)
         {
@@ -80,6 +92,5 @@ namespace GBEmmy.Opcode
                     throw new Exception(string.Format("Unknown operand {0}", name));
             }
         }
-
     }
 }
