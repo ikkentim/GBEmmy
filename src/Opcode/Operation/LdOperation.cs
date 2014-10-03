@@ -15,7 +15,7 @@ namespace GBEmmy.Opcode.Operation
 {
     public class LdOperation : IOperation
     {
-        public bool Call(Z80 cpu, Operand operand1, Operand operand2)
+        public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             cpu[operand1] = cpu[operand2];
 

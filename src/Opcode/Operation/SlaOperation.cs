@@ -15,7 +15,7 @@ namespace GBEmmy.Opcode.Operation
 {
     internal class SlaOperation : IOperation
     {
-        public bool Call(Z80 cpu, Operand operand1, Operand operand2)
+        public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             cpu.ToggleFlag(Flags.Carry, (cpu.GetByte(operand1) & 0x80) != 0);
 

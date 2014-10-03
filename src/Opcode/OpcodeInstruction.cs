@@ -44,7 +44,19 @@ namespace GBEmmy.Opcode
                 new RlOperation(),
                 new RrOperation(),
                 new SlaOperation(),
-                new SraOperation()
+                new SraOperation(),
+                new SwapOperation(), 
+                new SrlOperation(), 
+                new BitOperation(), 
+                new ResOperation(), 
+                new SetOperation(), 
+                new IncOperation(), 
+                new DecOperation(), 
+                new RlcaOperation(), 
+                new AddOperation(), 
+                new RrcaOperation(), 
+                new AdcOperation(),
+
             };
 
             IOperation operation = operators.FirstOrDefault(
@@ -53,8 +65,12 @@ namespace GBEmmy.Opcode
             if (operation == null) throw new Exception(string.Format("Opcode {0} has no operation", description));
 
             //operands
-            if (operands.Length >= 1) Operand1 = GetOperandByName(operands[0]);
-            if (operands.Length >= 2) Operand2 = GetOperandByName(operands[1]);
+            byte em = 0;
+            if (operands.Length >= 1) Operand1 = GetOperand(operands[0], ref em);
+            if (operands.Length >= 2) Operand2 = GetOperand(operands[1], ref  em);
+
+            //TODO: Check for C OR Carry flag
+            EmbeddedOperand = em;
         }
 
         public ushort Duration { get; set; }
@@ -63,8 +79,17 @@ namespace GBEmmy.Opcode
         public Operand Operand1 { get; set; }
         public Operand Operand2 { get; set; }
 
-        private static Operand GetOperandByName(string name)
+        public byte EmbeddedOperand { get; set; }
+
+        private static Operand GetOperand(string name, ref byte embedded)
         {
+            byte b;
+            if (byte.TryParse(name, out b))
+            {
+                embedded = b;
+                return Operand.Embedded;
+            }
+
             Operand value;
             if (Operand.TryParse(name, true, out value))
             {
@@ -82,12 +107,14 @@ namespace GBEmmy.Opcode
                 case "d8":
                     return Operand.Byte;
                 case "a16":
+                case "(a16)":
                     return Operand.Memory;
                 case "d16":
                     return Operand.Word;
                 case "r8":
                     return Operand.SignedByte;
 
+                //Flags operands???
                 default:
                     throw new Exception(string.Format("Unknown operand {0}", name));
             }

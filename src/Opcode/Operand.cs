@@ -39,6 +39,7 @@ namespace GBEmmy.Opcode
         NotCarry,
         Carry,
         SignedByte,
-        MemoryByte //memory at addr $FF00 + what's passed in instr
+        MemoryByte, //memory at addr $FF00 + what's passed in instr
+        Embedded //embedded in opcode
     }
 }

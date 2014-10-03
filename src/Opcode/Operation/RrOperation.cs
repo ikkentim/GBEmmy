@@ -15,7 +15,7 @@ namespace GBEmmy.Opcode.Operation
 {
     public class RrOperation : IOperation
     {
-        public bool Call(Z80 cpu, Operand operand1, Operand operand2)
+        public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             byte v;
             if (cpu.HasFlag(Flags.Carry))
