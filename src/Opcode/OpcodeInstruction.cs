@@ -56,30 +56,34 @@ namespace GBEmmy.Opcode
                 new AddOperation(), 
                 new RrcaOperation(), 
                 new AdcOperation(),
+                new StopOperation(), 
 
             };
 
-            IOperation operation = operators.FirstOrDefault(
+            Operation = operators.FirstOrDefault(
                 o => o.GetType().Name.Substring(0, o.GetType().Name.Length - "Operation".Length).ToUpper() == @operator);
 
-            if (operation == null) throw new Exception(string.Format("Opcode {0} has no operation", description));
+            if (Operation == null) throw new Exception(string.Format("Opcode {0} has no operation", description));
 
             //operands
             byte em = 0;
             if (operands.Length >= 1) Operand1 = GetOperand(operands[0], ref em);
-            if (operands.Length >= 2) Operand2 = GetOperand(operands[1], ref  em);
+            if (operands.Length >= 2) Operand2 = GetOperand(operands[1], ref em);
 
             //TODO: Check for C OR Carry flag
             EmbeddedOperand = em;
+
         }
 
-        public ushort Duration { get; set; }
-        public ushort ConditionalDuration { get; set; }
+        public ushort Duration { get; private set; }
+        public ushort ConditionalDuration { get; private set; }
 
-        public Operand Operand1 { get; set; }
-        public Operand Operand2 { get; set; }
+        public Operand Operand1 { get; private set; }
+        public Operand Operand2 { get; private set; }
 
-        public byte EmbeddedOperand { get; set; }
+        public byte EmbeddedOperand { get; private set; }
+
+        public IOperation Operation { get; private set; }
 
         private static Operand GetOperand(string name, ref byte embedded)
         {

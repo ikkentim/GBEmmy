@@ -12,6 +12,7 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace GBEmmy
@@ -24,6 +25,18 @@ namespace GBEmmy
         [STAThread]
         private static void Main()
         {
+            try
+            {
+                var z = (new Z80());
+
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.InnerException.Message);
+            }
+
+            return;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new GameForm());
