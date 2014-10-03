@@ -17,12 +17,17 @@ namespace GBEmmy
 {
     public class MMU
     {
-        public byte this[short addr]
+        public byte this[ushort addr]
         {
             get { return ReadByte(addr); }
             set { WriteByte(addr, value); }
         }
 
+        public byte this[byte high, byte low]
+        {
+            get { return ReadByte((high << 8) | low); }
+            set { WriteByte((high << 8) | low, value); }
+        }
         public byte this[int addr]
         {
             get { return ReadByte(addr); }
@@ -31,20 +36,20 @@ namespace GBEmmy
 
         public byte ReadByte(int addr)
         {
-            return ReadByte((short) addr);
+            return ReadByte((ushort) addr);
         }
 
-        public byte ReadByte(short addr)
+        public byte ReadByte(ushort addr)
         {
             throw new NotImplementedException();
         }
 
         public void WriteByte(int addr, byte val)
         {
-            WriteByte((short) addr, val);
+            WriteByte((ushort) addr, val);
         }
 
-        public void WriteByte(short addr, byte val)
+        public void WriteByte(ushort addr, byte val)
         {
             throw new NotImplementedException();
         }

@@ -51,9 +51,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clock.cs" />
+    <Compile Include="Opcode\OpcodeInstruction.cs" />
+    <Compile Include="Opcode\OpcodeInstructionsTable.cs" />
+    <Compile Include="Opcode\Operand.cs" />
+    <Compile Include="Opcode\Operation\EmptyOperation.cs" />
+    <Compile Include="Opcode\Operation\IOperation.cs" />
+    <Compile Include="Opcode\Operation\LdOperation.cs" />
+    <Compile Include="Opcode\Operation\NopOperation.cs" />
+    <Compile Include="Opcode\Operation\RlcOperation.cs" />
+    <Compile Include="Opcode\Operation\RlOperation.cs" />
+    <Compile Include="Opcode\Operation\RrcOperation.cs" />
+    <Compile Include="Opcode\Operation\RrOperation.cs" />
+    <Compile Include="Opcode\Operation\SraOperation.cs" />
+    <Compile Include="Opcode\Operation\SlaOperation.cs" />
+    <Compile Include="Opcode\Operation\SwapOperation.cs" />
     <Compile Include="Z80.cs" />
+    <Compile Include="Z80old.cs" />
     <Compile Include="Flags.cs" />
-    <Compile Include="GameBoyDisplay.cs" />
+    <Compile Include="GameBoyDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MMU.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>

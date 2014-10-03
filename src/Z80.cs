@@ -1,660 +1,261 @@
-﻿// GBEmmy
-// Copyright (C) 2014 Tim Potze
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-// OTHER DEALINGS IN THE SOFTWARE.
-// 
-// For more information, please refer to <http://unlicense.org>
-
-using System;
+﻿using System;
+using System.Resources;
+using System.Windows.Forms;
+using GBEmmy.Opcode;
 
 namespace GBEmmy
 {
     public class Z80
     {
-        public delegate void OpCode(Register r, MMU m);
+        public Clock Clock { get; private set; }
+        public MMU Memory { get; private set; }
+        public Register Register { get; private set; }
 
-        private readonly Clock _clock = new Clock();
-
-        private readonly MMU _memory = new MMU();
-        private readonly Register _register = new Register();
-
-        private OpCode[] _opCodes =
+        public Z80()
         {
-            // 0x0*
-            (r, m) =>
+            Clock = new Clock();
+            Memory = new MMU();
+            Register = new Register();
+
+            var table = Opcode.OpcodeInstructionsTable.Base;
+        }
+
+        public object this[Operand o]
+        {
+            get
             {
-                r.M = 1;
-                r.T = 4;
-            }, /* NOP */
-            (r, m) => OpCodes.LDddnn2(r, m, ref r.B, ref r.C, m[r.PC++], m[r.PC++]), /* LD BC,d16 */
-            (r, m) => OpCodes.LDBCA(r, m), /* LD (BC),A */
-            (r, m) => OpCodes.NOIMP(), /* INC BC */
-            (r, m) => OpCodes.NOIMP(), /* INC B */
-            (r, m) => OpCodes.NOIMP(), /* DEC B */
-            (r, m) => OpCodes.LDrn(r, ref r.B, m[r.PC++]), /* LD B,d8 */
-            (r, m) => OpCodes.NOIMP(), /* RLCA */
-            (r, m) => OpCodes.NOIMP(), /* LD (a16),SP */
-            (r, m) => OpCodes.NOIMP(), /* ADD HL,BC */
-            (r, m) => OpCodes.LDABC(r, m), /* LD A,(BC) */
-            (r, m) => OpCodes.NOIMP(), /* DEC BC */
-            (r, m) => OpCodes.NOIMP(), /* INC C */
-            (r, m) => OpCodes.NOIMP(), /* DEC C */
-            (r, m) => OpCodes.LDrn(r, ref r.C, m[r.PC++]), /* LD C,d8 */
-            (r, m) => OpCodes.NOIMP(), /* RRCA */
-            // 0x1*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x2*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x3*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x4*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x5*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x6*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x7*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x8*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0x9*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0xA*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0xB*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0xC*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0xD*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0xE*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            //0xF*
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP(),
-            (r, m) => OpCodes.NOIMP()
-        };
-
-        public void Reset()
-        {
-            _register.Reset();
-            _clock.Reset();
-        }
-    }
-
-
-    // ReSharper disable InconsistentNaming
-    public static class OpCodes
-    {
-        public static void NOIMP()
-        {
-            throw new NotImplementedException();
-        }
-
-        #region 8-Bit Load Group
-
-        /// <summary>
-        ///     LD r, r'
-        ///     r, ← r′
-        /// </summary>
-        public static void LDrr(Register reg, ref byte r1, ref byte r2)
-        {
-            r1 = r2;
-            reg.M = 1;
-            reg.T = 4;
-        }
-
-        /// <summary>
-        ///     LD r,n
-        ///     r ← n
-        /// </summary>
-        public static void LDrn(Register reg, ref byte r, byte n)
-        {
-            r = n;
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        /// <summary>
-        ///     LD r, (HL)
-        ///     r ← (HL)
-        /// </summary>
-        public static void LDrHL(Register reg, MMU mem, ref byte r)
-        {
-            r = mem[(reg.H << 8) + reg.L];
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        //skip: LD r, (IX+d)
-        //skip: LD r, (IY+d)
-
-        /// <summary>
-        ///     LD (HL), r
-        ///     (HL) ← r
-        /// </summary>
-        public static void LDHLr(Register reg, MMU mem, ref byte r)
-        {
-            mem[(reg.H << 8) + reg.L] = r;
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        //skip: LD (IX+d), r
-        //skip: LD (IY+d), r
-
-        /// <summary>
-        ///     LD (HL), n
-        ///     (HL) ← n
-        /// </summary>
-        public static void LDHLn(Register reg, MMU mem, byte n)
-        {
-            mem[(reg.H << 8) + reg.L] = n;
-            reg.M = 3;
-            reg.T = 10;
-        }
-
-        //skip: LD (IX+d), n
-        //skip: LD (IY+d), n
-
-        /// <summary>
-        ///     LD A, (BC)
-        ///     A ← (BC)
-        /// </summary>
-        public static void LDABC(Register reg, MMU mem)
-        {
-            reg.A = mem[(reg.B << 8) + reg.C];
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        /// <summary>
-        ///     LD A, (DE)
-        ///     A ← (DE)
-        /// </summary>
-        public static void LDADE(Register reg, MMU mem)
-        {
-            reg.A = mem[(reg.D << 8) + reg.E];
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        /// <summary>
-        ///     LD A, (nn)
-        ///     A ← (nn)
-        /// </summary>
-        public static void LDAnn(Register reg, MMU mem, byte n1, byte n2)
-        {
-            reg.A = mem[(n2 << 8) + n1];
-            reg.M = 4;
-            reg.T = 13;
-        }
-
-        /// <summary>
-        ///     LD (BC), A
-        ///     (BC) ← A
-        /// </summary>
-        public static void LDBCA(Register reg, MMU mem)
-        {
-            mem[(reg.B << 8) + reg.C] = reg.A;
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        /// <summary>
-        ///     LD (DE), A
-        ///     (DE) ← A
-        /// </summary>
-        public static void LDDEA(Register reg, MMU mem)
-        {
-            mem[(reg.D << 8) + reg.E] = reg.A;
-            reg.M = 2;
-            reg.T = 7;
-        }
-
-        /// <summary>
-        ///     LD (nn), A
-        ///     (nn) ← A
-        /// </summary>
-        public static void LDnnA(Register reg, MMU mem, byte n1, byte n2)
-        {
-            mem[(n2 << 8) + n1] = reg.A;
-            reg.M = 4;
-            reg.T = 13;
-        }
-
-        //skipped: LD A, I
-        //skipped: LD A, R
-        //skipped: LD I, A
-        //skipped: LD R, A
-
-        #endregion
-
-        #region 16-Bit Load Group
-
-        /// <summary>
-        ///     LD dd, nn
-        ///     dd ← nn
-        /// </summary>
-        public static void LDddnn(Register reg, MMU mem, ref byte d1, ref byte d2, byte n1, byte n2)
-        {
-            mem[(d1 << 8) + d2] = mem[(n2 << 8) + n1];
-            reg.M = 2;
-            reg.T = 10;
-        }
-
-        //skipped: LD IX, nn
-        //skipped: LD IY, nn
-
-        /// <summary>
-        ///     LD HL, (nn)
-        ///     H ← (nn + 1), L ← (nn)
-        /// </summary>
-        public static void LDHLnn(Register reg, MMU mem, byte n1, byte n2)
-        {
-            reg.H = mem[(n2 << 8) + n1 + 1];
-            reg.L = mem[(n2 << 8) + n1];
-            reg.M = 5;
-            reg.T = 16;
-        }
-
-        /// <summary>
-        ///     LD dd, (nn)
-        ///     ddh ← (nn + 1) ddl ← (nn)
-        /// </summary>
-        public static void LDddnn2(Register reg, MMU mem, ref byte d1, ref byte d2, byte n1, byte n2)
-        {
-            d2 = mem[(n2 << 8) + n1 + 1];
-            d1 = mem[(n2 << 8) + n1];
-            reg.M = 6;
-            reg.T = 206;
-        }
-
-        //skipped: LD IX, (nn)
-        //skipped: LD IY, (nn)
-
-        /// <summary>
-        ///     LD (nn), HL
-        ///     (nn + 1) ← H, (nn) ← L
-        /// </summary>
-        public static void LDnnHL(Register reg, MMU mem, byte n1, byte n2)
-        {
-            mem[(n2 << 8) + n1 + 1] = reg.H;
-            mem[(n2 << 8) + n1] = reg.L;
-
-            reg.M = 5;
-            reg.T = 16;
-        }
-
-        /// <summary>
-        ///     LD (nn), dd
-        ///     (nn + 1) ← ddh, (nn) ← ddl
-        /// </summary>
-        public static void LDnndd(Register reg, MMU mem, byte n1, byte n2, ref byte d1, ref byte d2)
-        {
-            mem[(n2 << 8) + n1 + 1] = d2;
-            mem[(n2 << 8) + n1] = d1;
-            reg.M = 6;
-            reg.T = 20;
-        }
-
-        //skipped: LD (nn), IX
-        //skipped: LD (nn), IY
-
-        /// <summary>
-        ///     LD SP, HL
-        ///     SP ← HL
-        /// </summary>
-        public static void LDSPHL(Register reg)
-        {
-            reg.SP = (short) ((reg.H << 8) + reg.L);
-            reg.M = 1;
-            reg.T = 6;
-        }
-
-        //skipped: LD SP, IX
-        //skipped: LD SP, IY
-
-        /// <summary>
-        ///     PUSH qq
-        ///     (SP – 2) ← qqL, (SP – 1) ← qqH
-        /// </summary>
-        public static void PUSHqq(Register reg, MMU mem, ref byte q1, ref byte q2)
-        {
-            mem[--reg.SP] = q2;
-            mem[--reg.SP] = q1;
-
-            reg.M = 3;
-            reg.T = 11;
-        }
-
-        //skipped: PUSH IX
-        //skipped: PUSH IY
-
-        /// <summary>
-        ///     POP qq
-        ///     qqH ← (SP+1), qqL ← (SP)
-        /// </summary>
-        public static void POPqq(Register reg, MMU mem, ref byte q1, ref byte q2)
-        {
-            q1 = mem[reg.SP++];
-            q2 = mem[reg.SP++];
-
-            reg.M = 3;
-            reg.T = 10;
-        }
-
-        //skipped: POP IX
-        //skipped: POP IY
-
-        #endregion
-
-        #region Exchange, Block Transfer, and Search Group
-
-        /// <summary>
-        ///     EX DE, HL
-        ///     DE ↔ HL
-        /// </summary>
-        public static void EXDEHL(Register reg, MMU mem)
-        {
-            byte tmp = reg.D;
-            reg.D = reg.H;
-            reg.H = tmp;
-
-            tmp = reg.E;
-            reg.E = reg.H;
-            reg.H = tmp;
-
-            reg.M = 1;
-            reg.T = 4;
-        }
-
-        //skipped: EX AF, AF′
-        //skipped: EXX
-
-        /// <summary>
-        ///     EX (SP), HL
-        ///     H ↔ (SP+1), L ↔ (SP)
-        /// </summary>
-        public static void EXSPHL(Register reg, MMU mem)
-        {
-            byte tmp = reg.H;
-            reg.H = mem[reg.SP + 1];
-            mem[reg.SP + 1] = tmp;
-
-            tmp = reg.L;
-            reg.L = mem[reg.SP];
-            mem[reg.SP] = tmp;
-
-            reg.M = 5;
-            reg.T = 19;
-        }
-
-        //skipped: EX (SP), IX
-        //skipped: EX (SP), IY
-
-        /// <summary>
-        ///     LDI
-        ///     (DE) ← (HL), DE ← DE + 1, HL ← HL + 1, BC ← BC – 1
-        /// </summary>
-        public static void LDI(Register reg, MMU mem)
-        {
-            mem[(reg.D << 8) + reg.E] = mem[(reg.H << 8) + reg.L];
-
-            unchecked
-            {
-                if (reg.E == 255) reg.D++;
-                reg.E++;
-
-                if (reg.L == 255) reg.H++;
-                reg.L++;
-
-                if (reg.C == 0) reg.B--;
-                reg.C--;
-
-                //TODO: check for overflow
+                switch (o)
+                {
+                    case Operand.A:
+                    case Operand.AF:
+                    case Operand.B:
+                    case Operand.Byte:
+                    case Operand.C:
+                    case Operand.D:
+                    case Operand.E:
+                    case Operand.H:
+                    case Operand.L:
+                    case Operand.Memory:
+                    case Operand.MemoryBC:
+                    case Operand.MemoryByte:
+                    case Operand.MemoryDE:
+                    case Operand.MemoryHL:
+                        return GetByte(o);
+                    case Operand.BC:
+                    case Operand.DE:
+                    case Operand.HL:
+                    case Operand.SP:
+                    case Operand.SignedByte:
+                    case Operand.Word:
+                        return GetWord(o);
+                    default:
+                        throw new NotImplementedException();
+                }
             }
-            reg.M = 4;
-            reg.T = 16;
+            set
+            {
+                switch (o)
+                {
+                    case Operand.A:
+                    case Operand.AF:
+                    case Operand.B:
+                    case Operand.Byte:
+                    case Operand.C:
+                    case Operand.D:
+                    case Operand.E:
+                    case Operand.H:
+                    case Operand.L:
+                    case Operand.Memory:
+                    case Operand.MemoryBC:
+                    case Operand.MemoryByte:
+                    case Operand.MemoryDE:
+                    case Operand.MemoryHL:
+                        if(!(value is byte)) throw new Exception();
+                        SetByte(o, (byte)value);
+                        break;
+                    case Operand.BC:
+                    case Operand.DE:
+                    case Operand.HL:
+                    case Operand.SP:
+                    case Operand.SignedByte:
+                    case Operand.Word:
+                        if (!(value is ushort)) throw new Exception();
+                        SetWord(o, (ushort)value);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }   
+            }
+        }
+        public byte GetByte(Operand o)
+        {
+            switch (o)
+            {
+                case Operand.A:
+                    return Register.A;
+                case Operand.AF:
+                    throw new NotImplementedException(); //?
+                case Operand.B:
+                    return Register.B;
+                case Operand.Byte:
+                    return Memory[Register.PC++];
+                case Operand.C:
+                    return Register.C;
+                case Operand.D:
+                    return Register.D;
+                case Operand.E:
+                    return Register.E;
+                case Operand.H:
+                    return Register.H;
+                case Operand.L:
+                    return Register.L;
+                case Operand.Memory:
+                    var low = Register.PC++;
+                    return Memory[Memory[Register.PC++], Memory[low]];
+                case Operand.MemoryBC:
+                    return Memory[Register.B, Register.C];
+                case Operand.MemoryByte:
+                    return Memory[0xFF, Memory[Register.PC++]];
+                case Operand.MemoryDE:
+                    return Memory[Register.D, Register.E];
+                case Operand.MemoryHL:
+                    return Memory[Register.H, Register.L];
+                default:
+                    throw new Exception(string.Format("Invalid operand {0}", o));
+            }
         }
 
-        /*
-         * Left of at LDIR, page 130 (pdf p. 144) of um0080.pdf
-         */
+        public void SetByte(Operand o, byte value)
+        {
+            switch (o)
+            {
+                case Operand.A:
+                    Register.A = value;
+                    break;
+                case Operand.AF:
+                    throw new NotImplementedException(); //?
+                case Operand.B:
+                    Register.B = value;
+                    break;
+                case Operand.Byte:
+                    throw new NotImplementedException();
+                case Operand.C:
+                    Register.C = value;
+                    break;
+                case Operand.D:
+                    Register.D = value;
+                    break;
+                case Operand.E:
+                    Register.E = value;
+                    break;
+                case Operand.H:
+                    Register.H = value;
+                    break;
+                case Operand.L:
+                    Register.L = value;
+                    break;
+                case Operand.Memory:
+                    var low = Register.PC++;
+                    Memory[Memory[Register.PC++], Memory[low]] = value;
+                    break;
+                case Operand.MemoryBC:
+                    Memory[Register.B, Register.C] = value;
+                    break;
+                case Operand.MemoryByte:
+                    Memory[0xFF, Memory[Register.PC++]] = value;
+                    break;
+                case Operand.MemoryDE:
+                    Memory[Register.D, Register.E] = value;
+                    break;
+                case Operand.MemoryHL:
+                    Memory[Register.H, Register.L] = value;
+                    break;
+                default:
+                    throw new Exception(string.Format("Invalid operand {0}", o));
+            }
+        }
 
-        #endregion
+        public bool HasFlag(Operand o)
+        {
+            switch (o)
+            {
+                case Operand.Carry:
+                    return Register.Flags.HasFlag(Flags.Carry);
+                case Operand.NotCarry:
+                    return !Register.Flags.HasFlag(Flags.Carry);
+                case Operand.NotZero:
+                    return !Register.Flags.HasFlag(Flags.Zero);
 
-        //TODO: condition bits
+                default:
+                    throw new Exception(string.Format("Invalid operand {0}", o));
+            }
+        }
+        public bool HasFlag(Flags f)
+        {
+            return Register.Flags.HasFlag(f);
+        }
+
+        public void ToggleFlag(Flags f, bool toggle)
+        {
+            if (toggle)
+            {
+                Register.Flags |= f;
+            }
+            else
+            {
+                Register.Flags &= (Flags.All ^ f);
+            }
+        }
+
+        public ushort GetWord(Operand o)
+        {
+            switch (o)
+            {
+                case Operand.BC:
+                    return (ushort) ((Register.B << 8) | Register.C);
+                case Operand.DE:
+                    return (ushort) ((Register.D << 8) | Register.E);
+                case Operand.HL:
+                    return (ushort) ((Register.H << 8) | Register.L);
+                case Operand.SP:
+                    return Register.SP;
+                case Operand.SignedByte:
+                    return (ushort) (sbyte) Memory[Register.SP++];
+                case Operand.Word:
+                    //correct order of pc? h/l?
+                    return (ushort) ((Memory[Register.PC++] << 8) | Memory[Register.PC++]);
+                default:
+                    throw new Exception(string.Format("Invalid operand {0}", o));
+            }
+        }
+
+        public void SetWord(Operand o, ushort value)
+        {
+            switch (o)
+            {
+                case Operand.BC:
+                    Register.B = (byte)(value >> 8);
+                    Register.C = (byte) value;
+                    break;
+                case Operand.DE:
+                    Register.D = (byte)(value >> 8);
+                    Register.E = (byte)value;
+                    break;
+                case Operand.HL:
+                    Register.H = (byte)(value >> 8);
+                    Register.L = (byte)value;
+                    break;
+                case Operand.SP:
+                    Register.SP = value;
+                    return;
+                case Operand.SignedByte:
+                    //???
+                    throw new NotImplementedException();
+                case Operand.Word:
+                    throw new NotImplementedException();
+                default:
+                    throw new Exception(string.Format("Invalid operand {0}", o));
+            }
+        }
     }
-
-    // ReSharper restore InconsistentNaming
 }

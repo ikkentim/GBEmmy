@@ -15,8 +15,8 @@ namespace GBEmmy
 {
     public class Clock
     {
-        public short M { get; set; }
-        public short T { get; set; }
+        public ushort M { get; set; }
+        public ushort T { get; set; }
 
         public void Reset()
         {

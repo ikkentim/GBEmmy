@@ -23,13 +23,14 @@ namespace GBEmmy
         public Flags Flags;
         public byte H;
         public byte L;
-        public short M;
 
-        public short PC;
-        public short SP;
+        public ushort PC;
+        public ushort SP;
 
-        //instruction time
-        public short T;
+        #region instruction time
+        public ushort M;
+        public ushort T;
+        #endregion
 
         public void Reset()
         {
