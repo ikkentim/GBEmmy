@@ -116,7 +116,6 @@
     <Compile Include="GameBoyDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MMUstub.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
