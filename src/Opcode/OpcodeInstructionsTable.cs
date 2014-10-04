@@ -486,7 +486,7 @@ namespace GBEmmy.Opcode
             new OpcodeInstruction("RET Z", "- - - -", 1, 20/8),
             new OpcodeInstruction("RET", "- - - -", 1, 16),
             new OpcodeInstruction("JP Z,a16", "- - - -", 3, 16, 12),
-            new OpcodeInstruction("PREFIX CB", "- - - -", 1, 4),
+            new OpcodeInstruction(), // new OpcodeInstruction("PREFIX CB", "- - - -", 1, 4),
             new OpcodeInstruction("CALL Z,a16", "- - - -", 3, 24, 12),
             new OpcodeInstruction("CALL a16", "- - - -", 3, 24),
             new OpcodeInstruction("ADC A,d8", "Z 0 H C", 2, 8),

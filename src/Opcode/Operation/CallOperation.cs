@@ -13,26 +13,25 @@
 
 namespace GBEmmy.Opcode.Operation
 {
-    internal class DecOperation : IOperation
-
+    internal class CallOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            object v = cpu[operand1];
+            var dest = (ushort) (cpu.Memory[cpu.Register.PC++] | (cpu.Memory[cpu.Register.PC++] << 8));
+            switch (operand1)
+            {
+                case Operand.Carry:
+                case Operand.Zero:
+                case Operand.NotCarry:
+                case Operand.NotZero:
+                    if (!cpu.HasFlag(operand1)) return false;
+                    break;
+            }
 
-            if (v is byte)
-            {
-                var w = (byte) v;
-                w--;
-                cpu.SetByte(operand1, w);
-                cpu.ToggleFlag(Flags.Zero, w == 0);
-                cpu.ToggleFlag(Flags.HalfCarry, (w ^ 0xF) == 0);
-                cpu.ToggleFlag(Flags.Subtract, w == 0);
-            }
-            else
-            {
-                cpu.SetWord(operand1, (ushort) (((ushort) v) - 1));
-            }
+            cpu.Memory[--cpu.Register.SP] = (byte) (cpu.Register.PC >> 8);
+            cpu.Memory[--cpu.Register.SP] = (byte) cpu.Register.PC;
+            cpu.Register.PC = dest;
+
             return true;
         }
     }

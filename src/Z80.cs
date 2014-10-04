@@ -51,6 +51,7 @@ namespace GBEmmy
                     case Operand.MemoryByte:
                     case Operand.MemoryDE:
                     case Operand.MemoryHL:
+                    case Operand.MemoryC:
                         return GetByte(o);
                     case Operand.BC:
                     case Operand.DE:
@@ -81,6 +82,7 @@ namespace GBEmmy
                     case Operand.MemoryByte:
                     case Operand.MemoryDE:
                     case Operand.MemoryHL:
+                    case Operand.MemoryC:
                         if (!(value is byte)) throw new Exception();
                         SetByte(o, (byte) value);
                         break;
@@ -132,56 +134,48 @@ namespace GBEmmy
                     return Memory[Register.D, Register.E];
                 case Operand.MemoryHL:
                     return Memory[Register.H, Register.L];
+                case Operand.MemoryC:
+                    return Memory[0xFF, Register.C];
                 default:
                     throw new Exception(string.Format("Invalid operand {0}", o));
             }
         }
 
-        public void SetByte(Operand o, byte value)
+        public byte SetByte(Operand o, byte value)
         {
             switch (o)
             {
                 case Operand.A:
-                    Register.A = value;
-                    break;
+                    return Register.A = value;
                 case Operand.AF:
                     throw new NotImplementedException(); //?
                 case Operand.B:
-                    Register.B = value;
-                    break;
+                    return Register.B = value;
                 case Operand.Byte:
                     throw new NotImplementedException();
                 case Operand.C:
-                    Register.C = value;
-                    break;
+                    return Register.C = value;
                 case Operand.D:
-                    Register.D = value;
-                    break;
+                    return Register.D = value;
                 case Operand.E:
-                    Register.E = value;
-                    break;
+                    return Register.E = value;
                 case Operand.H:
-                    Register.H = value;
-                    break;
+                    return Register.H = value;
                 case Operand.L:
-                    Register.L = value;
-                    break;
+                    return Register.L = value;
                 case Operand.Memory:
                     ushort low = Register.PC++;
-                    Memory[Memory[Register.PC++], Memory[low]] = value;
-                    break;
+                    return Memory[Memory[Register.PC++], Memory[low]] = value;
                 case Operand.MemoryBC:
-                    Memory[Register.B, Register.C] = value;
-                    break;
+                    return Memory[Register.B, Register.C] = value;
                 case Operand.MemoryByte:
-                    Memory[0xFF, Memory[Register.PC++]] = value;
-                    break;
+                    return Memory[0xFF, Memory[Register.PC++]] = value;
                 case Operand.MemoryDE:
-                    Memory[Register.D, Register.E] = value;
-                    break;
+                    return Memory[Register.D, Register.E] = value;
                 case Operand.MemoryHL:
-                    Memory[Register.H, Register.L] = value;
-                    break;
+                    return Memory[Register.H, Register.L] = value;
+                case Operand.MemoryC:
+                    return Memory[0xFF, Register.C] = value;
                 default:
                     throw new Exception(string.Format("Invalid operand {0}", o));
             }
@@ -197,7 +191,8 @@ namespace GBEmmy
                     return !Register.Flags.HasFlag(Flags.Carry);
                 case Operand.NotZero:
                     return !Register.Flags.HasFlag(Flags.Zero);
-
+                case Operand.None:
+                    return true;
                 default:
                     throw new Exception(string.Format("Invalid operand {0}", o));
             }
@@ -206,6 +201,11 @@ namespace GBEmmy
         public bool HasFlag(Flags f)
         {
             return Register.Flags.HasFlag(f);
+        }
+
+        public void ResetFlags()
+        {
+            Register.Flags = Flags.None;
         }
 
         public void ToggleFlag(Flags f, bool toggle)

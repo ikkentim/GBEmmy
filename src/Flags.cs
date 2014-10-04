@@ -22,6 +22,7 @@ namespace GBEmmy
         Subtract = 0x40, //b6
         HalfCarry = 0x20, //b5
         Carry = 0x10, //b4
+        None = 0,
         All = 0xF0
     }
 }

@@ -33,6 +33,7 @@ namespace GBEmmy.Opcode
         Memory, //memory at addr passed in instr
         MemoryBC,
         MemoryDE,
+        MemoryC,
         MemoryHL,
         Zero,
         NotZero,

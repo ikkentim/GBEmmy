@@ -45,19 +45,45 @@ namespace GBEmmy.Opcode
                 new RrOperation(),
                 new SlaOperation(),
                 new SraOperation(),
-                new SwapOperation(), 
-                new SrlOperation(), 
-                new BitOperation(), 
-                new ResOperation(), 
-                new SetOperation(), 
-                new IncOperation(), 
-                new DecOperation(), 
-                new RlcaOperation(), 
-                new AddOperation(), 
-                new RrcaOperation(), 
+                new SwapOperation(),
+                new SrlOperation(),
+                new BitOperation(),
+                new ResOperation(),
+                new SetOperation(),
+                new IncOperation(),
+                new DecOperation(),
+                new RlcaOperation(),
+                new AddOperation(),
+                new RrcaOperation(),
                 new AdcOperation(),
-                new StopOperation(), 
-
+                new StopOperation(),
+                new RlaOperation(),
+                new JrOperation(),
+                new RraOperation(),
+                new LdiOperation(),
+                new DaaOperation(),
+                new CplOperation(),
+                new LddOperation(),
+                new ScfOperation(),
+                new CcfOperation(),
+                new HaltOperation(),
+                new SubOperation(),
+                new SbcOperation(),
+                new AndOperation(),
+                new XorOperation(),
+                new OrOperation(),
+                new CpOperation(),
+                new RetOperation(),
+                new PopOperation(),
+                new JpOperation(),
+                new CallOperation(),
+                new PushOperation(),
+                new RstOperation(),
+                new RetiOperation(),
+                new LdhOperation(),
+                new DiOperation(),
+                new LdhlOperation(),
+                new EiOperation()
             };
 
             Operation = operators.FirstOrDefault(
@@ -67,12 +93,11 @@ namespace GBEmmy.Opcode
 
             //operands
             byte em = 0;
-            if (operands.Length >= 1) Operand1 = GetOperand(operands[0], ref em);
-            if (operands.Length >= 2) Operand2 = GetOperand(operands[1], ref em);
+            if (operands.Length >= 1) Operand1 = GetOperand(operands[0], @operator, ref em);
+            if (operands.Length >= 2) Operand2 = GetOperand(operands[1], @operator, ref em);
 
             //TODO: Check for C OR Carry flag
             EmbeddedOperand = em;
-
         }
 
         public ushort Duration { get; private set; }
@@ -85,7 +110,7 @@ namespace GBEmmy.Opcode
 
         public IOperation Operation { get; private set; }
 
-        private static Operand GetOperand(string name, ref byte embedded)
+        private static Operand GetOperand(string name, string @operator, ref byte embedded)
         {
             byte b;
             if (byte.TryParse(name, out b))
@@ -94,10 +119,17 @@ namespace GBEmmy.Opcode
                 return Operand.Embedded;
             }
 
+            if (name.Length > 1 && name.Last() == 'H')
+            {
+                embedded = Convert.ToByte(name.Substring(0, name.Length - 1), 16);
+                return Operand.Embedded;
+            }
+
             Operand value;
             if (Operand.TryParse(name, true, out value))
             {
-                return value;
+                if (!(value == Operand.C && new[] {"JR", "JP", "CALL", "RET"}.Contains(name)))
+                    return value;
             }
 
             switch (name)
@@ -110,6 +142,10 @@ namespace GBEmmy.Opcode
                     return Operand.MemoryHL;
                 case "d8":
                     return Operand.Byte;
+                case "(a8)":
+                    return Operand.MemoryByte;
+                case "(C)":
+                    return Operand.MemoryC;
                 case "a16":
                 case "(a16)":
                     return Operand.Memory;
@@ -117,8 +153,15 @@ namespace GBEmmy.Opcode
                     return Operand.Word;
                 case "r8":
                     return Operand.SignedByte;
-
-                //Flags operands???
+                case "NZ":
+                    return Operand.NotZero;
+                case "Z":
+                    return Operand.Zero;
+                case "NC":
+                    return Operand.NotCarry;
+                case "C":
+                    return Operand.Carry;
+                    //Flags operands???
                 default:
                     throw new Exception(string.Format("Unknown operand {0}", name));
             }

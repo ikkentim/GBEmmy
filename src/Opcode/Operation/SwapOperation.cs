@@ -11,15 +11,13 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
-
 namespace GBEmmy.Opcode.Operation
 {
     public class SwapOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.SetByte(operand1, (byte)((cpu.GetByte(operand1) >> 4) | (cpu.GetByte(operand1) << 4)));
+            cpu.SetByte(operand1, (byte) ((cpu.GetByte(operand1) >> 4) | (cpu.GetByte(operand1) << 4)));
 
             cpu.ToggleFlag(Flags.Zero, cpu.GetByte(operand1) == 0);
             cpu.ToggleFlag(Flags.Subtract, false);
