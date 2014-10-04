@@ -166,5 +166,10 @@ namespace GBEmmy.Opcode
                     throw new Exception(string.Format("Unknown operand {0}", name));
             }
         }
+
+        public int Call(Z80 cpu)
+        {
+            return Operation.Call(cpu, Operand1, Operand2, EmbeddedOperand) ? Duration : ConditionalDuration;
+        }
     }
 }

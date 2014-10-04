@@ -11,16 +11,13 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Opcode.Operation
+namespace GBEmmy
 {
-    internal class PopOperation : IOperation
+    public class VideoProcessor
     {
-        public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
+        public double Run(double timePassed)
         {
-            cpu.SetWord(operand1, (ushort) (cpu.Memory[cpu.Register.SP++] | (cpu.Memory[cpu.Register.SP++] << 8)));
-            //high / low byte swap?
-
-            return true;
+            return 0.01;
         }
     }
 }

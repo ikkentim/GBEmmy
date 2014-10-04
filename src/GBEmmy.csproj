@@ -50,7 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cartridge.cs" />
+    <Compile Include="CartridgeStream.cs" />
+    <Compile Include="CartridgeType.cs" />
     <Compile Include="Clock.cs" />
+    <Compile Include="GameBoy.cs" />
+    <Compile Include="Memory\MBC.cs" />
+    <Compile Include="Memory\MBC1.cs" />
+    <Compile Include="Memory\Bank.cs" />
     <Compile Include="Opcode\OpcodeInstruction.cs" />
     <Compile Include="Opcode\OpcodeInstructionsTable.cs" />
     <Compile Include="Opcode\Operand.cs" />
@@ -103,13 +110,13 @@
     <Compile Include="Opcode\Operation\SubOperation.cs" />
     <Compile Include="Opcode\Operation\SwapOperation.cs" />
     <Compile Include="Opcode\Operation\XorOperation.cs" />
+    <Compile Include="VideoProcessor.cs" />
     <Compile Include="Z80.cs" />
-    <Compile Include="Z80old.cs" />
     <Compile Include="Flags.cs" />
     <Compile Include="GameBoyDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MMU.cs" />
+    <Compile Include="MMUstub.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +138,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Content Include="cpu_instrs.gb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

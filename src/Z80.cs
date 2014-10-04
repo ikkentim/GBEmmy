@@ -12,23 +12,28 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
+using GBEmmy.Memory;
 using GBEmmy.Opcode;
 
 namespace GBEmmy
 {
     public class Z80
     {
-        public Z80()
+        private double _cycles;
+
+        public Z80(Cartridge cartridge)
         {
             Clock = new Clock();
-            Memory = new MMU();
+            Memory = cartridge.GetController();
             Register = new Register();
 
             OpcodeInstruction[] table = OpcodeInstructionsTable.Base;
         }
 
+        #region Properties
+
         public Clock Clock { get; private set; }
-        public MMU Memory { get; private set; }
+        public MBC Memory { get; private set; }
         public Register Register { get; private set; }
 
         public object this[Operand o]
@@ -83,7 +88,6 @@ namespace GBEmmy
                     case Operand.MemoryDE:
                     case Operand.MemoryHL:
                     case Operand.MemoryC:
-                        if (!(value is byte)) throw new Exception();
                         SetByte(o, (byte) value);
                         break;
                     case Operand.BC:
@@ -92,7 +96,6 @@ namespace GBEmmy
                     case Operand.SP:
                     case Operand.SignedByte:
                     case Operand.Word:
-                        if (!(value is ushort)) throw new Exception();
                         SetWord(o, (ushort) value);
                         break;
                     default:
@@ -100,6 +103,10 @@ namespace GBEmmy
                 }
             }
         }
+
+        #endregion
+
+        #region Bytes
 
         public byte GetByte(Operand o)
         {
@@ -181,6 +188,10 @@ namespace GBEmmy
             }
         }
 
+        #endregion
+
+        #region Flags
+
         public bool HasFlag(Operand o)
         {
             switch (o)
@@ -219,6 +230,10 @@ namespace GBEmmy
                 Register.Flags &= (Flags.All ^ f);
             }
         }
+
+        #endregion
+
+        #region Word
 
         public ushort GetWord(Operand o)
         {
@@ -268,6 +283,27 @@ namespace GBEmmy
                     throw new NotImplementedException();
                 default:
                     throw new Exception(string.Format("Invalid operand {0}", o));
+            }
+        }
+
+        #endregion
+
+        public void Run(double duration)
+        {
+            _cycles += (4194304.0*1*duration);
+
+            while (_cycles > 0.0)
+            {
+                ushort addr = Register.PC++;
+
+                int instrid = Memory[addr];
+
+                _cycles -= (addr == 0xCB
+                    ? OpcodeInstructionsTable.Cb[Memory[Register.PC++]]
+                    : OpcodeInstructionsTable.Base[instrid]).Call(this);
+
+                Clock.M += Register.M;
+                Clock.T += Register.T;
             }
         }
     }

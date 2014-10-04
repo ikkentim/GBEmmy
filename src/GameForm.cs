@@ -25,10 +25,18 @@ namespace GBEmmy
 
         protected override void OnLoad(EventArgs e)
         {
-            var z = (new Z80());
+            var loader = new CartridgeStream("cpu_instrs.gb");
+
+            var cpu = (new Z80(loader.ToCartridge()));
+            var gpu = new VideoProcessor();
+            var gb = new GameBoy(cpu, gpu);
+
+            gameBoyDisplay1.SetGPU(gpu);
+            gb.Run();
 
             base.OnLoad(e);
         }
+
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
