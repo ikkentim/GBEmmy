@@ -11,13 +11,77 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System.Windows.Forms;
+
 namespace GBEmmy
 {
     public class VideoProcessor
     {
-        public double Run(double timePassed)
+        private const byte Height = 144;
+        private const byte Width = 160;
+
+        private enum FrameState
         {
-            return 0.01;
+            ScanlineOAM = 2,
+            ScanlineVRAM = 3,
+            HBlank = 0,
+            VBlank = 1
+        }
+
+        private FrameState _state;
+        private byte _line;
+
+        public VideoProcessor()
+        {
+            
+        }
+
+        private static readonly double[] FrameStateDuration =
+        {
+            0.00004802, 
+            0.000114, 
+            0.00001931, 
+            0.00004137
+        };
+
+        private double _timeBuffer;
+        public double Run(double duration)
+        {
+            _timeBuffer += duration;
+
+            if (!(_timeBuffer >= FrameStateDuration[(int) _state])) return duration;
+
+            duration = FrameStateDuration[(int) _state];
+            switch (_state)
+            {
+                case FrameState.HBlank:
+                    _state = FrameState.ScanlineOAM;
+                    break;
+                case FrameState.ScanlineOAM:
+                    _state = FrameState.ScanlineVRAM;
+                    break;
+                case FrameState.ScanlineVRAM:
+
+                    //Fill line from VRAM
+
+                    _state = FrameState.ScanlineVRAM;
+                    if (_line >= Height)
+                    {
+                        _line = 0;
+                        _state = FrameState.VBlank;
+                    }
+                    else
+                    {
+                        _line++;
+                        _state = FrameState.HBlank;
+                    }
+                    break;
+                case FrameState.VBlank:
+                    _state = FrameState.ScanlineOAM;
+                    break;
+
+            }
+            return duration;
         }
     }
 }
