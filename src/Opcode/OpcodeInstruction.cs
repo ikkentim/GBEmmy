@@ -96,7 +96,6 @@ namespace GBEmmy.Opcode
             if (operands.Length >= 1) Operand1 = GetOperand(operands[0], @operator, ref em);
             if (operands.Length >= 2) Operand2 = GetOperand(operands[1], @operator, ref em);
 
-            //TODO: Check for C OR Carry flag
             EmbeddedOperand = em;
         }
 
@@ -128,7 +127,7 @@ namespace GBEmmy.Opcode
             Operand value;
             if (Operand.TryParse(name, true, out value))
             {
-                if (!(value == Operand.C && new[] {"JR", "JP", "CALL", "RET"}.Contains(name)))
+                if (!(value == Operand.C && new[] {"JR", "JP", "CALL", "RET"}.Contains(@operator)))
                     return value;
             }
 
@@ -161,7 +160,6 @@ namespace GBEmmy.Opcode
                     return Operand.NotCarry;
                 case "C":
                     return Operand.Carry;
-                    //Flags operands???
                 default:
                     throw new Exception(string.Format("Unknown operand {0}", name));
             }
