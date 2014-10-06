@@ -13,6 +13,8 @@
 
 using System;
 using System.Windows.Forms;
+using GBEmmy.Cartridges;
+using GBEmmy.Processor;
 
 namespace GBEmmy
 {
@@ -28,7 +30,7 @@ namespace GBEmmy
             var loader = new CartridgeStream("cpu_instrs.gb");
 
             var cpu = (new Z80(loader.ToCartridge()));
-            var gpu = new VideoProcessor();
+            var gpu = new GPU();
             var gb = new GameBoy(cpu, gpu);
 
             gameBoyDisplay1.SetGPU(gpu);

@@ -22,7 +22,7 @@ namespace GBEmmy
     public class GameBoyDisplay : GLControl
     {
         private float _angle;
-        private VideoProcessor _gpu;
+        private GPU _gpu;
         private bool _loaded;
 
         #region OnLoad
@@ -65,7 +65,7 @@ namespace GBEmmy
 
         #endregion
 
-        public void SetGPU(VideoProcessor gpu)
+        public void SetGPU(GPU gpu)
         {
             _gpu = gpu;
         }

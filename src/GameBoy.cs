@@ -13,6 +13,7 @@
 
 using System.Diagnostics;
 using System.Threading.Tasks;
+using GBEmmy.Processor;
 
 namespace GBEmmy
 {
@@ -20,14 +21,14 @@ namespace GBEmmy
     {
         private double _time;
 
-        public GameBoy(Z80 processor, VideoProcessor videoProcessor)
+        public GameBoy(Z80 processor, GPU videoProcessor)
         {
             Processor = processor;
             VideoProcessor = videoProcessor;
         }
 
         public Z80 Processor { get; private set; }
-        public VideoProcessor VideoProcessor { get; private set; }
+        public GPU VideoProcessor { get; private set; }
 
         public void Update()
         {

@@ -13,6 +13,7 @@
 
 using System;
 using System.Linq;
+using GBEmmy.Cartridges;
 
 namespace GBEmmy.Memory
 {

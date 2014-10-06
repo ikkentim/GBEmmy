@@ -11,6 +11,8 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using GBEmmy.Cartridges;
+
 namespace GBEmmy.Memory
 {
     internal class MBC1 : MBC
