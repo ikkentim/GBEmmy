@@ -23,11 +23,12 @@ namespace GBEmmy.Memory
             RAM = cartridge.RAM;
             ROM = cartridge.ROM;
             WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
+            VRAM = new Bank(0x2000);
         }
 
         public Bank[] RAM { get; private set; }
         public Bank[] ROM { get; private set; }
-
+        public Bank VRAM { get; private set; }
         public bool RAMEnabled { get; protected set; }
 
         public Bank[] WorkRAM { get; private set; }
@@ -59,7 +60,7 @@ namespace GBEmmy.Memory
             {
                 case 0x8000:
                 case 0x9000:
-                    throw new NotImplementedException("VRAM not implemented");
+                    VRAM[address] = value;
                     break;
                 case 0xA000:
                 case 0xB000:
@@ -110,10 +111,10 @@ namespace GBEmmy.Memory
                 case 0x5000:
                 case 0x6000:
                 case 0x7000:
-                    return ROM[ROMIndex][address & 0x0FFF];
+                    return ROM[ROMIndex][address];
                 case 0x8000:
                 case 0x9000:
-                    throw new NotImplementedException("VRAM not implemented");
+                    return VRAM[address];
                 case 0xA000:
                 case 0xB000:
                     if ((RAM != null) && (RAMEnabled))

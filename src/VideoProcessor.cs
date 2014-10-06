@@ -12,6 +12,7 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System.Windows.Forms;
+using GBEmmy.Memory;
 
 namespace GBEmmy
 {
@@ -19,6 +20,10 @@ namespace GBEmmy
     {
         private const byte Height = 144;
         private const byte Width = 160;
+        private MBC _memory;
+        private byte _activeMap;
+        private byte _scrollX;
+        private byte _scrollY;
 
         private enum FrameState
         {
@@ -31,9 +36,9 @@ namespace GBEmmy
         private FrameState _state;
         private byte _line;
 
-        public VideoProcessor()
+        public VideoProcessor(MBC memory)
         {
-            
+            _memory = memory;
         }
 
         private static readonly double[] FrameStateDuration =
@@ -45,6 +50,12 @@ namespace GBEmmy
         };
 
         private double _timeBuffer;
+
+        private void RenderToScreenBuffer()
+        {
+            
+        }
+
         public double Run(double duration)
         {
             _timeBuffer += duration;
