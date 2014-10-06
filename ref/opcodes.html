@@ -1,0 +1,612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>GameBoy Opcodes Summary</TITLE>
+<META content="text/html; charset=windows-1252" http-equiv=Content-Type>
+<META content="MSHTML 5.00.3013.2600" name=GENERATOR></HEAD>
+<BODY background="">
+<H1>GameBoy Opcode Summary</H1>
+<P>The GameBoy has instructions &amp; registers similiar to the 8080, 8085, 
+&amp; Z80 microprocessors. The internal 8-bit registers are A, B, C, D, E, F, H, 
+&amp; L. Theses registers may be used in pairs for 16-bit operations as AF, BC, 
+DE, &amp; HL. The two remaining 16-bit registers are the program counter (PC) 
+and the stack pointer (SP).</P>
+<P>The F register holds the cpu flags. The operation of these flags is identical 
+to their Z80 relative. The lower four bits of this register always read zero 
+even if written with a one.</P>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD align=middle colSpan=8 COLSTART="1">Flag Register</TD></TR>
+  <TR>
+    <TD COLSTART="1">7</TD>
+    <TD COLSTART="2">6</TD>
+    <TD COLSTART="3">5</TD>
+    <TD COLSTART="4">4</TD>
+    <TD COLSTART="5">3</TD>
+    <TD COLSTART="6">2</TD>
+    <TD COLSTART="7">1</TD>
+    <TD COLSTART="8">0</TD></TR>
+  <TR>
+    <TD COLSTART="1">Z</TD>
+    <TD COLSTART="2">N</TD>
+    <TD COLSTART="3">H</TD>
+    <TD COLSTART="4">C</TD>
+    <TD COLSTART="5">0</TD>
+    <TD COLSTART="6">0</TD>
+    <TD COLSTART="7">0</TD>
+    <TD COLSTART="8">0</TD></TR></TBODY></TABLE>
+<P>The GameBoy CPU is based on a subset of the Z80 microprocessor. A summary of 
+these commands is given below.</P>
+<TABLE border=3>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">Mnemonic</TD>
+    <TD COLSTART="2">Symbolic Operation</TD>
+    <TD COLSTART="3">Comments</TD>
+    <TD COLSTART="4">CPU Clocks</TD>
+    <TD COLSTART="5">Flags - Z,N,H,C</TD></TR></TBODY></TABLE>
+<H3>8-Bit Loads</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">LD r,s</TD>
+    <TD COLSTART="2">r <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> s</TD>
+    <TD align=middle COLSTART="3">s=r,n,(HL)</TD>
+    <TD align=middle COLSTART="4">r=4, n=8, (HL)=8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD d,r</TD>
+    <TD COLSTART="2">d <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> r</TD>
+    <TD align=middle rowSpan=2 COLSTART="3">d=r,(HL)</TD>
+    <TD align=middle COLSTART="4">r=4, (HL)=8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD d,n</TD>
+    <TD COLSTART="2">d <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> n</TD>
+    <TD align=middle COLSTART="4">r=8, (HL)=12</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD A,(ss)</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> (ss)</TD>
+    <TD align=middle COLSTART="3">ss=BC,DE,HL,nn</TD>
+    <TD rowSpan=2 COLSTART="4">[BC,DE,HL]=8, nn=16</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD (dd),A</TD>
+    <TD COLSTART="2">(dd) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A</TD>
+    <TD COLSTART="3">dd=BC,DE,HL,nn</TD></TR>
+  <TR>
+    <TD rowSpan=2 COLSTART="1">LD A,(C)</TD>
+    <TD rowSpan=2 COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> ($FF00+C)</TD>
+    <TD align=middle rowSpan=9 COLSTART="3">-</TD>
+    <TD align=middle rowSpan=2 COLSTART="4">8</TD></TR>
+  <TR></TR>
+  <TR>
+    <TD COLSTART="1">LD (C),A</TD>
+    <TD COLSTART="2">($FF00+C) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A</TD>
+    <TD align=middle COLSTART="4">8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LDD A,(HL)</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> (HL), HL <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> HL - 1</TD>
+    <TD align=middle COLSTART="4">8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LDD (HL),A</TD>
+    <TD COLSTART="2">(HL) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A, HL <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> HL - 1</TD>
+    <TD align=middle COLSTART="4">8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LDI A,(HL)</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> (HL), HL <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> HL + 1</TD>
+    <TD align=middle COLSTART="4">8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LDI (HL),A</TD>
+    <TD COLSTART="2">(HL) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A, HL <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> HL + 1</TD>
+    <TD align=middle COLSTART="4">8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LDH (n),A</TD>
+    <TD COLSTART="2">($FF00+n) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A</TD>
+    <TD align=middle COLSTART="4">12</TD></TR>
+  <TR>
+    <TD COLSTART="1">LDH A,(n)</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> ($FF00+n)</TD>
+    <TD align=middle COLSTART="4">12</TD></TR></TBODY></TABLE>
+<H3>16-Bit Loads</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">LD dd,nn</TD>
+    <TD COLSTART="2">dd <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> nn</TD>
+    <TD COLSTART="3">dd=BC,DE,HL,SP</TD>
+    <TD COLSTART="4">12</TD>
+    <TD rowSpan=3 COLSTART="5">-</TD>
+    <TD rowSpan=3 COLSTART="6">-</TD>
+    <TD rowSpan=3 COLSTART="7">-</TD>
+    <TD rowSpan=3 COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD (nn),SP</TD>
+    <TD COLSTART="2">(nn) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> SP </TD>
+    <TD align=middle rowSpan=3 COLSTART="3">-</TD>
+    <TD COLSTART="4">20</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD SP,HL </TD>
+    <TD COLSTART="2">SP <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> HL</TD>
+    <TD align=middle COLSTART="4">8</TD></TR>
+  <TR>
+    <TD COLSTART="1">LD HL,(SP+e)</TD>
+    <TD COLSTART="2">HL <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> (SP+e)</TD>
+    <TD COLSTART="4">12</TD>
+    <TD COLSTART="5">0</TD>
+    <TD COLSTART="6">0</TD>
+    <TD COLSTART="7">*</TD>
+    <TD COLSTART="8">*</TD></TR>
+  <TR>
+    <TD rowSpan=2 COLSTART="1">PUSH ss</TD>
+    <TD rowSpan=2 COLSTART="2">(SP-1) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> ssh, (SP-2) <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> ssl, SP<IMG align=bottom height=7 
+      src="images/arrow.gif" width=15>SP-2 </TD>
+    <TD rowSpan=2 COLSTART="3">ss=BC,DE,HL,AF</TD>
+    <TD rowSpan=2 COLSTART="4">16</TD>
+    <TD rowSpan=3 COLSTART="5">-</TD>
+    <TD rowSpan=3 COLSTART="6">-</TD>
+    <TD rowSpan=3 COLSTART="7">-</TD>
+    <TD rowSpan=3 COLSTART="8">-</TD></TR>
+  <TR></TR>
+  <TR>
+    <TD COLSTART="1">POP dd </TD>
+    <TD COLSTART="2">ddl <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> (SP), ddh <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> (SP+1), SP<IMG align=bottom height=7 
+      src="images/arrow.gif" width=15>SP+2 </TD>
+    <TD COLSTART="3">dd=BC,DE,HL,AF </TD>
+    <TD COLSTART="4">12</TD></TR></TBODY></TABLE>
+<H3>8-Bit ALU</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">ADD A,s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A + s </TD>
+    <TD rowSpan=8 COLSTART="3">CY is the carry flag. s=r,n,(HL)</TD>
+    <TD rowSpan=8 COLSTART="4">r=4, n=8, (HL)=8</TD>
+    <TD rowSpan=2 COLSTART="5">*</TD>
+    <TD rowSpan=2 COLSTART="6">0</TD>
+    <TD rowSpan=2 COLSTART="7">*</TD>
+    <TD rowSpan=2 COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">ADC A,s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A + s + CY </TD></TR>
+  <TR>
+    <TD COLSTART="1">SUB s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A - s </TD>
+    <TD rowSpan=2 COLSTART="5">*</TD>
+    <TD rowSpan=2 COLSTART="6">1</TD>
+    <TD rowSpan=2 COLSTART="7">*</TD>
+    <TD rowSpan=2 COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">SBC A,s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A - s - CY </TD></TR>
+  <TR>
+    <TD COLSTART="1">AND s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A <IMG 
+      align=bottom height=8 src="images/and.gif" width=8> 
+      s</TD>
+    <TD COLSTART="5">*</TD>
+    <TD COLSTART="6">0</TD>
+    <TD COLSTART="7">1</TD>
+    <TD COLSTART="8">0</TD></TR>
+  <TR>
+    <TD COLSTART="1">OR s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A <IMG 
+      align=bottom height=8 src="images/or.gif" width=8> 
+      s </TD>
+    <TD rowSpan=2 COLSTART="5">*</TD>
+    <TD rowSpan=2 COLSTART="6">0</TD>
+    <TD rowSpan=2 COLSTART="7">0</TD>
+    <TD rowSpan=2 COLSTART="8">0</TD></TR>
+  <TR>
+    <TD COLSTART="1">XOR s</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> A <IMG 
+      align=bottom height=7 src="images/xor.gif" width=7> 
+      s </TD></TR>
+  <TR>
+    <TD COLSTART="1">CP s</TD>
+    <TD COLSTART="2">A - s</TD>
+    <TD COLSTART="5">*</TD>
+    <TD COLSTART="6">1</TD>
+    <TD COLSTART="7">*</TD>
+    <TD COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">INC s</TD>
+    <TD COLSTART="2">s <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> s + 1 </TD>
+    <TD align=middle rowSpan=2 COLSTART="3">s=r,(HL)</TD>
+    <TD align=middle rowSpan=2 COLSTART="4">r=4, (HL)=12</TD>
+    <TD align=middle COLSTART="5">*</TD>
+    <TD align=middle COLSTART="6">0</TD>
+    <TD align=middle COLSTART="7">*</TD>
+    <TD align=middle COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">DEC s</TD>
+    <TD COLSTART="2">s <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> s - 1 </TD>
+    <TD COLSTART="5">*</TD>
+    <TD COLSTART="6">1</TD>
+    <TD COLSTART="7">*</TD>
+    <TD align=middle COLSTART="8">-</TD></TR></TBODY></TABLE>
+<H3>16-Bit Arithmetic</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">ADD HL,ss</TD>
+    <TD COLSTART="2">HL <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> HL + ss </TD>
+    <TD rowSpan=4 COLSTART="3">ss=BC,DE,HL,SP</TD>
+    <TD align=middle COLSTART="4">8</TD>
+    <TD align=middle COLSTART="5">-</TD>
+    <TD align=middle COLSTART="6">0</TD>
+    <TD align=middle COLSTART="7">*</TD>
+    <TD align=middle COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">ADD SP,e</TD>
+    <TD COLSTART="2">SP <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> SP + e </TD>
+    <TD COLSTART="4">16</TD>
+    <TD COLSTART="5">0</TD>
+    <TD COLSTART="6">0</TD>
+    <TD COLSTART="7">*</TD>
+    <TD COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">INC ss</TD>
+    <TD COLSTART="2">ss <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> ss + 1 </TD>
+    <TD align=middle COLSTART="4">8</TD>
+    <TD align=middle rowSpan=2 COLSTART="5">-</TD>
+    <TD align=middle rowSpan=2 COLSTART="6">-</TD>
+    <TD align=middle rowSpan=2 COLSTART="7">-</TD>
+    <TD align=middle rowSpan=2 COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">DEC ss</TD>
+    <TD COLSTART="2">ss <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> ss - 1 </TD>
+    <TD align=middle COLSTART="4">8</TD></TR></TBODY></TABLE>
+<H3>Miscellaneous</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">SWAP s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=37 
+      src="images/swap.gif" width=70></TD>
+    <TD COLSTART="3">Swap nibbles. s=r,(HL)</TD>
+    <TD COLSTART="4">r=8, (HL)=16</TD>
+    <TD COLSTART="5">*</TD>
+    <TD COLSTART="6">0</TD>
+    <TD COLSTART="7">0</TD>
+    <TD COLSTART="8">0</TD></TR>
+  <TR>
+    <TD COLSTART="1">DAA</TD>
+    <TD COLSTART="2">Converts A into packed BCD.</TD>
+    <TD align=middle rowSpan=2 COLSTART="3">-</TD>
+    <TD align=middle COLSTART="4">4</TD>
+    <TD align=middle COLSTART="5">*</TD>
+    <TD align=middle COLSTART="6">-</TD>
+    <TD align=middle COLSTART="7">0</TD>
+    <TD align=middle COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">CPL</TD>
+    <TD COLSTART="2">A <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> /A</TD>
+    <TD align=middle COLSTART="4">4</TD>
+    <TD align=middle COLSTART="5">-</TD>
+    <TD align=middle COLSTART="6">1</TD>
+    <TD align=middle COLSTART="7">1</TD>
+    <TD align=middle COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">CCF</TD>
+    <TD COLSTART="2">CY <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> /CY </TD>
+    <TD rowSpan=2 COLSTART="3">CY is the carry flag.</TD>
+    <TD align=middle COLSTART="4">4</TD>
+    <TD align=middle COLSTART="5">-</TD>
+    <TD align=middle COLSTART="6">0</TD>
+    <TD align=middle COLSTART="7">0</TD>
+    <TD align=middle COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">SCF</TD>
+    <TD COLSTART="2">CY <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> 1</TD>
+    <TD align=middle COLSTART="4">4</TD>
+    <TD align=middle COLSTART="5">-</TD>
+    <TD align=middle COLSTART="6">0</TD>
+    <TD align=middle COLSTART="7">0</TD>
+    <TD align=middle COLSTART="8">1</TD></TR>
+  <TR>
+    <TD COLSTART="1">NOP</TD>
+    <TD COLSTART="2">No operation.</TD>
+    <TD align=middle rowSpan=5 COLSTART="3">-</TD>
+    <TD align=middle COLSTART="4">4</TD>
+    <TD align=middle rowSpan=5 COLSTART="5">-</TD>
+    <TD align=middle rowSpan=5 COLSTART="6">-</TD>
+    <TD align=middle rowSpan=5 COLSTART="7">-</TD>
+    <TD align=middle rowSpan=5 COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">HALT</TD>
+    <TD COLSTART="2">Halt CPU until an interrupt occurs.</TD>
+    <TD align=middle COLSTART="4">4</TD></TR>
+  <TR>
+    <TD COLSTART="1">STOP </TD>
+    <TD COLSTART="2">Halt CPU.</TD>
+    <TD align=middle COLSTART="4">4</TD></TR>
+  <TR>
+    <TD COLSTART="1">DI</TD>
+    <TD COLSTART="2">Disable Interrupts.</TD>
+    <TD align=middle COLSTART="4">4</TD></TR>
+  <TR>
+    <TD COLSTART="1">EI</TD>
+    <TD COLSTART="2">Enable Interrupts. </TD>
+    <TD align=middle COLSTART="4">4</TD></TR></TBODY></TABLE>
+<H3>Rotates &amp; Shifts</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">RLCA</TD>
+    <TD COLSTART="2"><IMG height=22 
+      src="images/rlc.gif" width=92></TD>
+    <TD rowSpan=4 COLSTART="3"></TD>
+    <TD rowSpan=4 COLSTART="4">4</TD>
+    <TD rowSpan=4 COLSTART="5">0</TD>
+    <TD rowSpan=4 COLSTART="6">0</TD>
+    <TD rowSpan=4 COLSTART="7">0</TD>
+    <TD rowSpan=4 COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">RLA</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/rl.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">RRCA</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/rrc.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">RRA</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/rr.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">RLC s</TD>
+    <TD COLSTART="2"><IMG height=22 
+      src="images/rlc.gif" width=92></TD>
+    <TD rowSpan=4 COLSTART="3">s=A,r,(HL)</TD>
+    <TD rowSpan=4 COLSTART="4">r=8,(HL)=16</TD>
+    <TD rowSpan=7 COLSTART="5">*</TD>
+    <TD rowSpan=7 COLSTART="6">0</TD>
+    <TD rowSpan=7 COLSTART="7">0</TD>
+    <TD rowSpan=7 COLSTART="8">*</TD></TR>
+  <TR>
+    <TD COLSTART="1">RL s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/rl.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">RRC s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/rrc.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">RR s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/rr.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">SLA s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=23 
+      src="images/sla.gif" width=92></TD>
+    <TD rowSpan=3 COLSTART="3">s=r,(HL)</TD>
+    <TD rowSpan=3 COLSTART="4">r=8, (HL)=16</TD></TR>
+  <TR>
+    <TD COLSTART="1">SRA s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/sra.gif" width=92></TD></TR>
+  <TR>
+    <TD COLSTART="1">SRL s</TD>
+    <TD COLSTART="2"><IMG align=bottom height=22 
+      src="images/srl.gif" width=92></TD></TR></TBODY></TABLE>
+<H3>Bit Opcodes</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">BIT b,s</TD>
+    <TD COLSTART="2">Z <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> /sb</TD>
+    <TD rowSpan=3 COLSTART="3">Z is zero flag. s=r,(HL)</TD>
+    <TD COLSTART="4">r=8, (HL)=12</TD>
+    <TD COLSTART="5">*</TD>
+    <TD COLSTART="6">0</TD>
+    <TD COLSTART="7">1</TD>
+    <TD COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">SET b,s</TD>
+    <TD COLSTART="2">sb <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> 1</TD>
+    <TD rowSpan=2 COLSTART="4">r=8, (HL)=16</TD>
+    <TD rowSpan=2 COLSTART="5">-</TD>
+    <TD rowSpan=2 COLSTART="6">-</TD>
+    <TD rowSpan=2 COLSTART="7">-</TD>
+    <TD rowSpan=2 COLSTART="8">-</TD></TR>
+  <TR>
+    <TD COLSTART="1">RES b,s</TD>
+    <TD COLSTART="2">sb <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> 
+0</TD></TR></TBODY></TABLE>
+<H3>Jumps</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">JP nn</TD>
+    <TD COLSTART="2">PC <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> nn</TD>
+    <TD align=middle rowSpan=5 COLSTART="3">-</TD>
+    <TD align=middle COLSTART="4">16</TD></TR>
+  <TR>
+    <TD COLSTART="1">JP cc,nn</TD>
+    <TD COLSTART="2">If cc is true, PC <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> nn, else 
+    continue.</TD>
+    <TD COLSTART="4">If cc is true, 16 else 12.</TD></TR>
+  <TR>
+    <TD COLSTART="1">JP (HL)</TD>
+    <TD COLSTART="2">PC <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> HL</TD>
+    <TD align=middle COLSTART="4">4</TD></TR>
+  <TR>
+    <TD COLSTART="1">JR e</TD>
+    <TD COLSTART="2">PC <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> PC + e </TD>
+    <TD align=middle COLSTART="4">12</TD></TR>
+  <TR>
+    <TD COLSTART="1">JR cc,e</TD>
+    <TD COLSTART="2">if cc is true, PC <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> PC + e, else 
+      continue.</TD>
+    <TD COLSTART="4">If cc is true, 12 else 8.</TD></TR></TBODY></TABLE>
+<H3>Calls</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">CALL nn</TD>
+    <TD COLSTART="2">(SP-1) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> PCh, (SP-2) <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> PCl, PC <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> nn, SP<IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15>SP-2 </TD>
+    <TD align=middle rowSpan=2 COLSTART="3">-</TD>
+    <TD align=middle COLSTART="4">24</TD></TR>
+  <TR>
+    <TD COLSTART="1">CALL cc,nn</TD>
+    <TD COLSTART="2">If condition cc is false continue, else same as CALL 
+    nn.</TD>
+    <TD COLSTART="4">If cc is true, 24 else 12.</TD></TR></TBODY></TABLE>
+<H3>Restarts</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">RST f</TD>
+    <TD COLSTART="2">(SP-1) <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> PCh, (SP-2) <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> PCl, PCh <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> 0, PCl <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> f, SP<IMG align=bottom height=7 
+      src="images/arrow.gif" width=15>SP-2 </TD>
+    <TD align=middle COLSTART="3">- </TD>
+    <TD align=middle COLSTART="4">16</TD></TR></TBODY></TABLE>
+<H3>Returns</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">RET</TD>
+    <TD COLSTART="2">pcl <IMG align=bottom height=7 
+      src="images/arrow.gif" width=15> (SP), pch <IMG 
+      align=bottom height=7 src="images/arrow.gif" 
+      width=15> (SP+1), SP<IMG align=bottom height=7 
+      src="images/arrow.gif" width=15>SP+2 </TD>
+    <TD align=middle rowSpan=3 COLSTART="3">-</TD>
+    <TD align=middle COLSTART="4">16</TD></TR>
+  <TR>
+    <TD COLSTART="1">RET cc</TD>
+    <TD COLSTART="2">If cc is true, RET else continue.</TD>
+    <TD COLSTART="4">If cc is true, 20 else 8.</TD></TR>
+  <TR>
+    <TD COLSTART="1">RETI</TD>
+    <TD COLSTART="2">Return then enable interrupts.</TD>
+    <TD align=middle COLSTART="4">16</TD></TR></TBODY></TABLE>
+<H3>Terminology</H3>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD COLSTART="1">-</TD>
+    <TD COLSTART="2">Flag is not affected by this operation.</TD></TR>
+  <TR>
+    <TD COLSTART="1">*</TD>
+    <TD COLSTART="2">Flag is affected according to result of operation.</TD></TR>
+  <TR>
+    <TD COLSTART="1">b</TD>
+    <TD COLSTART="2">A bit number in any 8-bit register or memory 
+  location.</TD></TR>
+  <TR>
+    <TD COLSTART="1">C</TD>
+    <TD COLSTART="2">Carry flag.</TD></TR>
+  <TR>
+    <TD COLSTART="1">cc </TD>
+    <TD COLSTART="2">Flag condition code: C,NC,NZ,Z</TD></TR>
+  <TR>
+    <TD COLSTART="1">d</TD>
+    <TD COLSTART="2">Any 8-bit destination register or memory location.</TD></TR>
+  <TR>
+    <TD COLSTART="1">dd</TD>
+    <TD COLSTART="2">Any 16-bit destination register or memory location.</TD></TR>
+  <TR>
+    <TD COLSTART="1">e</TD>
+    <TD COLSTART="2">8-bit signed 2's complement displacement.</TD></TR>
+  <TR>
+    <TD COLSTART="1">f</TD>
+    <TD COLSTART="2">8 special call locations in page zero. </TD></TR>
+  <TR>
+    <TD COLSTART="1">H</TD>
+    <TD COLSTART="2">Half-carry flag.</TD></TR>
+  <TR>
+    <TD COLSTART="1">N</TD>
+    <TD COLSTART="2">Subtraction flag.</TD></TR>
+  <TR>
+    <TD COLSTART="1">NC</TD>
+    <TD COLSTART="2">Not carry flag</TD></TR>
+  <TR>
+    <TD COLSTART="1">NZ</TD>
+    <TD COLSTART="2">Not zero flag.</TD></TR>
+  <TR>
+    <TD COLSTART="1">n</TD>
+    <TD COLSTART="2">Any 8-bit binary number.</TD></TR>
+  <TR>
+    <TD COLSTART="1">nn</TD>
+    <TD COLSTART="2">Any 16-bit binary number.</TD></TR>
+  <TR>
+    <TD COLSTART="1">r</TD>
+    <TD COLSTART="2">Any 8-bit register. (A,B,C,D,E,H, or L)</TD></TR>
+  <TR>
+    <TD COLSTART="1">s</TD>
+    <TD COLSTART="2">Any 8-bit source register or memory location.</TD></TR>
+  <TR>
+    <TD COLSTART="1">sb</TD>
+    <TD COLSTART="2">A bit in a specific 8-bit register or memory 
+  location.</TD></TR>
+  <TR>
+    <TD COLSTART="1">ss</TD>
+    <TD COLSTART="2">Any 16-bit source register or memory location.</TD></TR>
+  <TR>
+    <TD COLSTART="1">Z</TD>
+    <TD COLSTART="2">Zero Flag.</TD></TR></TBODY></TABLE></BODY></HTML>
