@@ -40,7 +40,7 @@ namespace GBEmmy.Memory
         public Bank VRAM { get; private set; }
         public bool RAMEnabled { get; protected set; }
 
-        public Registers.RegisterCollection Registers { get; private set; }
+        public RegisterCollection Registers { get; private set; }
 
         public Bank[] WorkRAM { get; private set; }
 
@@ -76,7 +76,7 @@ namespace GBEmmy.Memory
                 case 0xA000:
                 case 0xB000:
                     if ((RAM != null) && (RAMEnabled)) RAM[RAMIndex][address] = value;
-                    
+
                     break;
                 case 0xC000:
                 case 0xE000:
@@ -85,7 +85,7 @@ namespace GBEmmy.Memory
                 case 0xD000:
                 case 0xF000:
                     if (address >= 0xFF00) Registers[address] = value;
-                    
+
                     if (address >= 0xFE00)
                     {
                         if (address < 0xFEA0)
@@ -131,7 +131,7 @@ namespace GBEmmy.Memory
                 case 0xD000:
                 case 0xF000:
                     if (address >= 0xFF00) return Registers[address];
-                    
+
                     if (address >= 0xFE00)
                     {
                         if (address < 0xFEA0)

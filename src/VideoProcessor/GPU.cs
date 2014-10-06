@@ -25,18 +25,18 @@ namespace GBEmmy
         private static readonly double[] FrameStateDuration =
         {
             0.00004802, //HBlank
-            0.000114,   //VBlank
+            0.000114, //VBlank
             0.00001931, //ScanlineOAM
-            0.00004137  //ScanlineVRAM
+            0.00004137 //ScanlineVRAM
         };
 
-        private LYRegister _ly;
-        private LCDCRegister _lcdc;
-        private STATRegister _stat;
+        private readonly LCDCRegister _lcdc;
+        private readonly LYRegister _ly;
+        private readonly STATRegister _stat;
+        private Map[] _maps;
         private byte _scrollX;
         private byte _scrollY;
-        private Map[] _maps;
-     
+
         private double _timeBuffer;
 
         public GPU(MBC memory)
@@ -58,12 +58,11 @@ namespace GBEmmy
             if (_lcdc.BackgroundEnabled)
             {
                 //Render background
-                var map = _maps[_lcdc.ActiveMap];
+                Map map = _maps[_lcdc.ActiveMap];
 
                 for (int x = 0; x < Width; x += Tile.Width)
                 {
                     int tileIdx = 0 //TODO
-
                 }
                 //...
             }
@@ -79,7 +78,7 @@ namespace GBEmmy
 
             if (!(_timeBuffer >= FrameStateDuration[(int) _stat.State])) return duration;
 
-            duration = FrameStateDuration[(int)_stat.State];
+            duration = FrameStateDuration[(int) _stat.State];
             switch (_stat.State)
             {
                 case FrameState.HBlank:
@@ -106,23 +105,21 @@ namespace GBEmmy
                     }
                     break;
                 case FrameState.VBlank:
-                    if(_ly.Line++ == 0) _stat.State = FrameState.ScanlineOAM;
+                    if (_ly.Line++ == 0) _stat.State = FrameState.ScanlineOAM;
                     break;
             }
             return duration;
         }
-
     }
 
-    class Map
+    internal class Map
     {
         public Map(ushort attributesAddress)
         {
-            
         }
     }
 
-    class Tile
+    internal class Tile
     {
         public const byte Width = 8;
         public const byte Height = 8;

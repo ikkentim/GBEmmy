@@ -11,7 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System.Diagnostics;
 using System.Threading.Tasks;
 using GBEmmy.Cartridges;
 using GBEmmy.Processor;
