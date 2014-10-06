@@ -11,8 +11,9 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System.Windows.Forms;
 using GBEmmy.Memory;
+using GBEmmy.Registers;
+using GBEmmy.VideoProcessor;
 
 namespace GBEmmy
 {
@@ -20,79 +21,110 @@ namespace GBEmmy
     {
         private const byte Height = 144;
         private const byte Width = 160;
-        private MBC _memory;
-        private byte _activeMap;
-        private byte _scrollX;
-        private byte _scrollY;
-
-        private enum FrameState
-        {
-            ScanlineOAM = 2,
-            ScanlineVRAM = 3,
-            HBlank = 0,
-            VBlank = 1
-        }
-
-        private FrameState _state;
-        private byte _line;
-
-        public GPU(MBC memory)
-        {
-            _memory = memory;
-        }
 
         private static readonly double[] FrameStateDuration =
         {
-            0.00004802, 
-            0.000114, 
-            0.00001931, 
-            0.00004137
+            0.00004802, //HBlank
+            0.000114,   //VBlank
+            0.00001931, //ScanlineOAM
+            0.00004137  //ScanlineVRAM
         };
 
+        private LYRegister _ly;
+        private LCDCRegister _lcdc;
+        private STATRegister _stat;
+        private byte _scrollX;
+        private byte _scrollY;
+        private Map[] _maps;
+     
         private double _timeBuffer;
 
-        private void RenderToScreenBuffer()
+        public GPU(MBC memory)
         {
-            
+            _ly = memory.Registers.Get<LYRegister>();
+            _lcdc = memory.Registers.Get<LCDCRegister>();
+            _stat = memory.Registers.Get<STATRegister>();
+        }
+
+        private void RenderBackgroundToScreenBuffer(byte line)
+        {
+            if (!_lcdc.DisplayEnabled)
+            {
+                //TODO: Clear line
+
+                return;
+            }
+
+            if (_lcdc.BackgroundEnabled)
+            {
+                //Render background
+                var map = _maps[_lcdc.ActiveMap];
+
+                for (int x = 0; x < Width; x += Tile.Width)
+                {
+                    int tileIdx = 0 //TODO
+
+                }
+                //...
+            }
+        }
+
+        private void RenderSpritesToScreenBuffer(byte line)
+        {
         }
 
         public double Run(double duration)
         {
             _timeBuffer += duration;
 
-            if (!(_timeBuffer >= FrameStateDuration[(int) _state])) return duration;
+            if (!(_timeBuffer >= FrameStateDuration[(int) _stat.State])) return duration;
 
-            duration = FrameStateDuration[(int) _state];
-            switch (_state)
+            duration = FrameStateDuration[(int)_stat.State];
+            switch (_stat.State)
             {
                 case FrameState.HBlank:
-                    _state = FrameState.ScanlineOAM;
+                    _stat.State = FrameState.ScanlineOAM;
                     break;
                 case FrameState.ScanlineOAM:
-                    _state = FrameState.ScanlineVRAM;
+                    _stat.State = FrameState.ScanlineVRAM;
                     break;
                 case FrameState.ScanlineVRAM:
 
                     //Fill line from VRAM
+                    RenderBackgroundToScreenBuffer(_ly.Line);
+                    RenderSpritesToScreenBuffer(_ly.Line);
 
-                    _state = FrameState.ScanlineVRAM;
-                    if (_line >= Height)
+                    _stat.State = FrameState.ScanlineVRAM;
+                    if (_ly.Line >= Height)
                     {
-                        _line = 0;
-                        _state = FrameState.VBlank;
+                        _stat.State = FrameState.VBlank;
                     }
                     else
                     {
-                        _line++;
-                        _state = FrameState.HBlank;
+                        _ly.Line++;
+                        _stat.State = FrameState.HBlank;
                     }
                     break;
                 case FrameState.VBlank:
-                    _state = FrameState.ScanlineOAM;
+                    if(_ly.Line++ == 0) _stat.State = FrameState.ScanlineOAM;
                     break;
-
             }
             return duration;
         }
+
+    }
+
+    class Map
+    {
+        public Map(ushort attributesAddress)
+        {
+            
+        }
+    }
+
+    class Tile
+    {
+        public const byte Width = 8;
+        public const byte Height = 8;
     }
 }

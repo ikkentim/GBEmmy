@@ -13,6 +13,7 @@
 
 using System.Diagnostics;
 using System.Threading.Tasks;
+using GBEmmy.Cartridges;
 using GBEmmy.Processor;
 
 namespace GBEmmy
@@ -27,6 +28,12 @@ namespace GBEmmy
             VideoProcessor = videoProcessor;
         }
 
+        public GameBoy(Cartridge cartridge)
+        {
+            Processor = new Z80(cartridge);
+            VideoProcessor = new GPU(Processor.Memory);
+        }
+
         public Z80 Processor { get; private set; }
         public GPU VideoProcessor { get; private set; }
 
@@ -39,7 +46,6 @@ namespace GBEmmy
             {
                 double duration = VideoProcessor.Run(_time);
 
-                Debug.WriteLine("Processor.Run %0", duration);
                 Processor.Run(duration);
                 _time -= duration;
             }

@@ -11,35 +11,20 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
-using System.Windows.Forms;
-using GBEmmy.Cartridges;
+using GBEmmy.VideoProcessor;
 
-namespace GBEmmy
+namespace GBEmmy.Registers
 {
-    public partial class GameForm : Form
+    /// <summary>
+    ///     LCDC Status (R/W)
+    /// </summary>
+    public class STATRegister : Register
     {
-        public GameForm()
+        public FrameState State
         {
-            InitializeComponent();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            var loader = new CartridgeStream("cpu_instrs.gb");
-
-            var gb = new GameBoy(loader.ToCartridge());
-
-            gameBoyDisplay1.SetGPU(gb.VideoProcessor);
-            gb.Run();
-
-            base.OnLoad(e);
-        }
-
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
+            // bit 0-1
+            get { return (FrameState) (byte) (Value & 0x03); }
+            set { Value = (byte) ((Value & ~0x03) | (byte) value); }
         }
     }
 }

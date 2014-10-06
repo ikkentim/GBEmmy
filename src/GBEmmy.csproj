@@ -111,8 +111,14 @@
     <Compile Include="Processor\Opcode\Operation\SwapOperation.cs" />
     <Compile Include="Processor\Opcode\Operation\XorOperation.cs" />
     <Compile Include="Registers\IRegister.cs" />
+    <Compile Include="Registers\LCDCRegister.cs" />
+    <Compile Include="Registers\LYRegister.cs" />
     <Compile Include="Registers\Register.cs" />
     <Compile Include="Registers\RegisterCollection.cs" />
+    <Compile Include="Registers\SCXRegister.cs" />
+    <Compile Include="Registers\SCYRegister.cs" />
+    <Compile Include="Registers\STATRegister.cs" />
+    <Compile Include="VideoProcessor\FrameState.cs" />
     <Compile Include="VideoProcessor\GPU.cs" />
     <Compile Include="Processor\Z80.cs" />
     <Compile Include="Processor\Flags.cs" />

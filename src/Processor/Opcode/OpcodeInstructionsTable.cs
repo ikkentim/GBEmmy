@@ -11,8 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using GBEmmy.Opcode;
-
 namespace GBEmmy.Processor.Opcode
 {
     public static class OpcodeInstructionsTable

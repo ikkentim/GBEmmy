@@ -14,10 +14,28 @@
 namespace GBEmmy.Registers
 {
     /// <summary>
-    ///     Basic register implementation.
+    ///     LCDC Y-Coordinate (R).
+    ///     The LY indicates the vertical line to which
+    ///     the present data is transferred to the LCD
+    ///     Driver. The LY can take on any value
+    ///     between 0 through 153. The values between
+    ///     144 and 153 indicate the V-Blank period.
+    ///     Writing will reset the counter.
     /// </summary>
-    public class Register : IRegister
+    public class LYRegister : IRegister
     {
-        public byte Value { get; set; }
+        private byte _line;
+
+        public byte Line
+        {
+            get { return _line; }
+            set { _line = (byte) (value%154); }
+        }
+
+        public byte Value
+        {
+            get { return Line; }
+            set { Line = 0; }
+        }
     }
 }

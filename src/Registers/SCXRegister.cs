@@ -14,10 +14,10 @@
 namespace GBEmmy.Registers
 {
     /// <summary>
-    ///     Basic register implementation.
+    ///     Scroll X (R/W).
+    ///     8 Bit value $00-$FF to scroll BG Y screen position.
     /// </summary>
-    public class Register : IRegister
+    public class SCXRegister : Register
     {
-        public byte Value { get; set; }
     }
 }

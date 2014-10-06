@@ -14,7 +14,6 @@
 using System;
 using GBEmmy.Cartridges;
 using GBEmmy.Memory;
-using GBEmmy.Opcode;
 using GBEmmy.Processor.Opcode;
 
 namespace GBEmmy.Processor

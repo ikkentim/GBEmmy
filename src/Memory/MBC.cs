@@ -14,6 +14,7 @@
 using System;
 using System.Linq;
 using GBEmmy.Cartridges;
+using GBEmmy.Registers;
 
 namespace GBEmmy.Memory
 {
@@ -25,12 +26,21 @@ namespace GBEmmy.Memory
             ROM = cartridge.ROM;
             WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
             VRAM = new Bank(0x2000);
+            Registers = new RegisterCollection();
+
+            Registers.Set(0xFF40, new LCDCRegister());
+            Registers.Set(0xFF41, new STATRegister());
+            Registers.Set(0xFF42, new SCYRegister());
+            Registers.Set(0xFF43, new SCXRegister());
+            Registers.Set(0xFF44, new LYRegister());
         }
 
         public Bank[] RAM { get; private set; }
         public Bank[] ROM { get; private set; }
         public Bank VRAM { get; private set; }
         public bool RAMEnabled { get; protected set; }
+
+        public Registers.RegisterCollection Registers { get; private set; }
 
         public Bank[] WorkRAM { get; private set; }
 
@@ -65,10 +75,8 @@ namespace GBEmmy.Memory
                     break;
                 case 0xA000:
                 case 0xB000:
-                    if ((RAM != null) && (RAMEnabled))
-                    {
-                        RAM[RAMIndex][address] = value;
-                    }
+                    if ((RAM != null) && (RAMEnabled)) RAM[RAMIndex][address] = value;
+                    
                     break;
                 case 0xC000:
                 case 0xE000:
@@ -76,10 +84,8 @@ namespace GBEmmy.Memory
                     break;
                 case 0xD000:
                 case 0xF000:
-                    if (address >= 0xFF00)
-                    {
-                        throw new NotImplementedException();
-                    }
+                    if (address >= 0xFF00) Registers[address] = value;
+                    
                     if (address >= 0xFE00)
                     {
                         if (address < 0xFEA0)
@@ -118,20 +124,14 @@ namespace GBEmmy.Memory
                     return VRAM[address];
                 case 0xA000:
                 case 0xB000:
-                    if ((RAM != null) && (RAMEnabled))
-                    {
-                        return RAM[RAMIndex][address];
-                    }
-                    break;
+                    return RAMEnabled ? RAM[RAMIndex][address] : (byte) 0x00;
                 case 0xC000:
                 case 0xE000:
                     return WorkRAM[0][address];
                 case 0xD000:
                 case 0xF000:
-                    if (address >= 0xFF00)
-                    {
-                        throw new NotImplementedException();
-                    }
+                    if (address >= 0xFF00) return Registers[address];
+                    
                     if (address >= 0xFE00)
                     {
                         if (address < 0xFEA0)

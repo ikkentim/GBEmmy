@@ -11,13 +11,13 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Registers
+namespace GBEmmy.VideoProcessor
 {
-    /// <summary>
-    ///     Basic register implementation.
-    /// </summary>
-    public class Register : IRegister
+    public enum FrameState : byte
     {
-        public byte Value { get; set; }
+        ScanlineOAM = 2,
+        ScanlineVRAM = 3,
+        HBlank = 0,
+        VBlank = 1
     }
 }
