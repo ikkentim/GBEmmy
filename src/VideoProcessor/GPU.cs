@@ -33,9 +33,10 @@ namespace GBEmmy
         private readonly LCDCRegister _lcdc;
         private readonly LYRegister _ly;
         private readonly STATRegister _stat;
+        private readonly SCXRegister _scx;
+        private readonly SCYRegister _scy;
+
         private Map[] _maps;
-        private byte _scrollX;
-        private byte _scrollY;
 
         private double _timeBuffer;
 
@@ -44,6 +45,9 @@ namespace GBEmmy
             _ly = memory.Registers.Get<LYRegister>();
             _lcdc = memory.Registers.Get<LCDCRegister>();
             _stat = memory.Registers.Get<STATRegister>();
+            _scx = memory.Registers.Get<SCXRegister>();
+            _scy = memory.Registers.Get<SCYRegister>();
+
         }
 
         private void RenderBackgroundToScreenBuffer(byte line)
@@ -58,11 +62,16 @@ namespace GBEmmy
             if (_lcdc.BackgroundEnabled)
             {
                 //Render background
-                Map map = _maps[_lcdc.ActiveMap];
+                var map = _maps[_lcdc.ActiveMap];
 
-                for (int x = 0; x < Width; x += Tile.Width)
+                for (byte x = 0; x < Width; x += Tile.Width)
                 {
-                    int tileIdx = 0 //TODO
+                    var mapX = (_scx.Value + x)%Width;
+                    var mapY = (_scy.Value + _ly.Line)%Height;
+
+                    var idx = (byte) ((mapY%Tile.Height)*Map.Width + (mapX%Tile.Width));
+
+                    //...
                 }
                 //...
             }
@@ -114,8 +123,19 @@ namespace GBEmmy
 
     internal class Map
     {
-        public Map(ushort attributesAddress)
+        public const byte Width = 32;
+        public const byte Height = 32;
+
+        public Map(ushort patternAddress, ushort attributesAddress)
         {
+        }
+
+        class TileAttributes
+        {
+            public TileAttributes(ushort addr)
+            {
+                
+            }
         }
     }
 
