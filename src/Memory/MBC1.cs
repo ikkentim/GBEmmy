@@ -21,6 +21,7 @@ namespace GBEmmy.Memory
 
         public MBC1(Cartridge cartridge) : base(cartridge)
         {
+            ROMIndex = 1;
         }
 
         public override void WriteByte(ushort address, byte value)

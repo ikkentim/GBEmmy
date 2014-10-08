@@ -21,6 +21,11 @@ namespace GBEmmy.Registers
     {
         private readonly IRegister[] _registers = new IRegister[0x100]; //$FF00-$FFFF
 
+        public RegisterCollection ()
+        {
+            for(int i=0;i<_registers.Length;i++)
+                _registers[i] = new Register();
+        }
         public byte this[ushort address]
         {
             get

@@ -11,6 +11,7 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System;
 using System.Diagnostics;
 
 namespace GBEmmy.Processor.Opcode.Operation
@@ -19,7 +20,7 @@ namespace GBEmmy.Processor.Opcode.Operation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            Debug.WriteLine("Call to empty operation");
+            throw new Exception("Invalid operation call");
             return true;
         }
     }

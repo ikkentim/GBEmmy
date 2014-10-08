@@ -12,6 +12,7 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
+using System.Linq;
 using GBEmmy.Memory;
 
 namespace GBEmmy.Cartridges

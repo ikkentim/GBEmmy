@@ -118,6 +118,8 @@
     <Compile Include="Registers\SCXRegister.cs" />
     <Compile Include="Registers\SCYRegister.cs" />
     <Compile Include="Registers\STATRegister.cs" />
+    <Compile Include="Registers\SVBKRegister.cs" />
+    <Compile Include="Registers\VBKRegister.cs" />
     <Compile Include="VideoProcessor\FrameState.cs" />
     <Compile Include="VideoProcessor\GPU.cs" />
     <Compile Include="Processor\Z80.cs" />

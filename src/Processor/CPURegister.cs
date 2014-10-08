@@ -27,6 +27,8 @@ namespace GBEmmy.Processor
         public ushort PC;
         public ushort SP;
 
+        public ushort IFF;
+
         #region instruction time
 
         public ushort M;

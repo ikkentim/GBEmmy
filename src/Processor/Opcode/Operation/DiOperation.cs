@@ -19,7 +19,8 @@ namespace GBEmmy.Processor.Opcode.Operation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            throw new NotImplementedException();
+            cpu.Register.IFF &= 0xDE; //( ~0x21 );
+            return true;
         }
     }
 }

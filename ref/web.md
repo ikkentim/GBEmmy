@@ -10,3 +10,5 @@ Z80 docs:
 
 gb specifics:
 [GBCPUman.pdf](http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf)
+
+[GameBoyProgrammingManual.pdf](http://students.washington.edu/fidelp/galp/megaguides/GameBoyProgrammingManual.pdf)

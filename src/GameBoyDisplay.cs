@@ -12,6 +12,7 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using OpenTK;
@@ -31,13 +32,11 @@ namespace GBEmmy
         {
             base.OnLoad(e);
 
-            GL.ClearColor(Color.Black);
-            GL.Enable(EnableCap.DepthTest);
+            GL.ClearColor(Color.Firebrick);
 
             Application.Idle += Application_Idle;
 
             _loaded = true;
-            OnResize(EventArgs.Empty);
         }
 
         #endregion
@@ -74,15 +73,11 @@ namespace GBEmmy
         {
             if (!_loaded) return;
 
-            if (ClientSize.Height == 0)
-                ClientSize = new Size(ClientSize.Width, 1);
+            GL.Viewport(0, 0, Width, Height);
 
-            GL.Viewport(0, 0, ClientSize.Width, ClientSize.Height);
-
-            float aspectRatio = Width/(float) Height;
-            Matrix4 perpective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 1, 64);
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref perpective);
+            GL.LoadIdentity();
+            GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -92,69 +87,42 @@ namespace GBEmmy
 
         #region private void Render()
 
-        private void Render()
+        private static Color ToColor(uint color)
         {
-            Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
+            var b = (int)(color & 0x000000FF);
+            var g = (int)((color & 0x0000FF00) >> 8);
+            var r = (int)((color & 0x00FF0000) >> 16);
+            var a = (int)((color & 0xFF000000) >> 24);
 
-            //Test stuffs
-            GL.Rotate(_angle, 0.0f, 1.0f, 0.0f);
-            _angle += 0.01f;
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            DrawCube();
-
-            SwapBuffers();
+            return Color.FromArgb(a, r, g, b);
         }
 
-        #endregion
-
-        #region private void DrawCube()
-
-        private void DrawCube()
+        private void Render()
         {
-            GL.Begin(PrimitiveType.Quads);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            GL.Color3(Color.Silver);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
+            double pxw = 1.0 / (GPU.Width / 2);
+            double pxh = 1.0 / (GPU.Height / 2);
 
-            GL.Color3(Color.Honeydew);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            for (int y = 0; y < GPU.Height; y++)
+                for (int x = 0; x < GPU.Width; x++)
+                {
 
-            GL.Color3(Color.Moccasin);
+                    GL.Begin(PrimitiveType.Quads);
+                    GL.Color3(ToColor(_gpu.ScreenBuffer[y * GPU.Width + x]));
 
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
+                    double xx = (x - GPU.Width/2)*pxw;
+                    double yy = (y - GPU.Height/2)*pxh;
 
-            GL.Color3(Color.IndianRed);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
+                    GL.Vertex2(new Vector2d(xx, yy));
+                    GL.Vertex2(new Vector2d(xx+pxw, yy));
+                    GL.Vertex2(new Vector2d(xx + pxw, yy+pxh));
+                    GL.Vertex2(new Vector2d(xx, yy+pxh));
 
-            GL.Color3(Color.PaleVioletRed);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
+                    GL.End();
+                }
 
-            GL.Color3(Color.ForestGreen);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-            GL.End();
+            SwapBuffers();
         }
 
         #endregion

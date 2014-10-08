@@ -11,6 +11,7 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System.Runtime.InteropServices;
 using GBEmmy.Memory;
 using GBEmmy.Registers;
 using GBEmmy.VideoProcessor;
@@ -19,8 +20,9 @@ namespace GBEmmy
 {
     public class GPU
     {
-        private const byte Height = 144;
-        private const byte Width = 160;
+        private readonly MBC _memory;
+        public const byte Height = 144;
+        public const byte Width = 160;
 
         private static readonly double[] FrameStateDuration =
         {
@@ -32,23 +34,27 @@ namespace GBEmmy
 
         private readonly LCDCRegister _lcdc;
         private readonly LYRegister _ly;
-        private readonly STATRegister _stat;
         private readonly SCXRegister _scx;
         private readonly SCYRegister _scy;
+        private readonly STATRegister _stat;
 
-        private Map[] _maps;
+        private readonly TileMap[] _tileMaps;
 
         private double _timeBuffer;
 
         public GPU(MBC memory)
         {
+            _memory = memory;
+            _tileMaps = new[] {new TileMap(memory, 0x8000), new TileMap(memory, 0x8800)};
+
             _ly = memory.Registers.Get<LYRegister>();
             _lcdc = memory.Registers.Get<LCDCRegister>();
             _stat = memory.Registers.Get<STATRegister>();
             _scx = memory.Registers.Get<SCXRegister>();
             _scy = memory.Registers.Get<SCYRegister>();
-
         }
+
+        public uint[] ScreenBuffer = new uint[Width * Height];
 
         private void RenderBackgroundToScreenBuffer(byte line)
         {
@@ -62,16 +68,20 @@ namespace GBEmmy
             if (_lcdc.BackgroundEnabled)
             {
                 //Render background
-                var map = _maps[_lcdc.ActiveMap];
+                TileMap map = _tileMaps[_lcdc.BackgroundTileMap];
 
-                for (byte x = 0; x < Width; x += Tile.Width)
+                for (byte x = 0; x < Width; x ++)
                 {
-                    var mapX = (_scx.Value + x)%Width;
-                    var mapY = (_scy.Value + _ly.Line)%Height;
+                    int mapX = (_scx.Value + x)%Width;
+                    int mapY = (_scy.Value + _ly.Line)%Height;
 
-                    var idx = (byte) ((mapY%Tile.Height)*Map.Width + (mapX%Tile.Width));
+                    //idx of tile on map
+                    var idx = (ushort) ((mapY/Tile.Height)*TileMap.Width + (mapX/Tile.Width));
 
-                    //...
+                    var tile = map[idx];
+
+                    var c = tile.GetPixel(_memory, (byte)(mapX%Tile.Width), (byte)(mapY%Tile.Height));
+                    ScreenBuffer[_ly.Line*Width + x] = c;
                 }
                 //...
             }
@@ -79,6 +89,7 @@ namespace GBEmmy
 
         private void RenderSpritesToScreenBuffer(byte line)
         {
+            //TODO
         }
 
         public double Run(double duration)
@@ -98,17 +109,16 @@ namespace GBEmmy
                     break;
                 case FrameState.ScanlineVRAM:
 
-                    //Fill line from VRAM
-                    RenderBackgroundToScreenBuffer(_ly.Line);
-                    RenderSpritesToScreenBuffer(_ly.Line);
-
-                    _stat.State = FrameState.ScanlineVRAM;
                     if (_ly.Line >= Height)
                     {
                         _stat.State = FrameState.VBlank;
                     }
                     else
                     {
+                        //Fill line from VRAM
+                        RenderBackgroundToScreenBuffer(_ly.Line);
+                        RenderSpritesToScreenBuffer(_ly.Line);
+
                         _ly.Line++;
                         _stat.State = FrameState.HBlank;
                     }
@@ -121,27 +131,75 @@ namespace GBEmmy
         }
     }
 
-    internal class Map
+    public class TileMap
     {
         public const byte Width = 32;
         public const byte Height = 32;
+        private readonly ushort _address;
 
-        public Map(ushort patternAddress, ushort attributesAddress)
+        private readonly LCDCRegister _lcdc;
+        private readonly MBC _memory;
+
+        public TileMap(MBC memory, ushort address)
         {
+            _memory = memory;
+            _address = address;
+            _lcdc = _memory.Registers.Get<LCDCRegister>();
         }
 
-        class TileAttributes
+        public Tile this[ushort idx]
         {
-            public TileAttributes(ushort addr)
+            get
             {
-                
+                byte tileidx = _memory[_address + idx];
+                return _lcdc.TileDataTable[tileidx];
             }
         }
     }
 
-    internal class Tile
+    public class TileDataTable
+    {
+        private readonly ushort _address;
+        private readonly bool _isSigned;
+
+        public TileDataTable(ushort address, bool isSigned)
+        {
+            _address = address;
+            _isSigned = isSigned;
+        }
+
+        public Tile this[byte idx]
+        {
+            get
+            {
+                return _isSigned
+                    ? new Tile((ushort) (_address + (((sbyte) idx + 128)*4)))
+                    : new Tile((ushort) (_address + idx*4));
+            }
+        }
+    }
+
+    public class Tile
     {
         public const byte Width = 8;
         public const byte Height = 8;
+
+        public Tile(ushort address)
+        {
+            Address = address;
+        }
+
+        public ushort Address { get; private set; }
+        
+        public uint GetPixel(MBC memory, byte x, byte y)
+        {
+            var l = memory[Address + y * 2];
+            var r = memory[Address + y * 2 + 1];
+
+            var c = ((l >> x) << 1 | (r >> x));
+
+            uint[] col = new uint[] {0xFFEFFFDE, 0xFFADD794, 0xFF529273, 0xFF183442};
+            return col[c];
+        }
     }
 }

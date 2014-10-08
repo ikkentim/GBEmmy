@@ -19,7 +19,9 @@ namespace GBEmmy.Processor.Opcode.Operation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            throw new NotImplementedException();
+            cpu.Memory[(ushort) (0xFF00 | embedded)] = cpu.GetByte(operand2);
+
+            return true;
         }
     }
 }

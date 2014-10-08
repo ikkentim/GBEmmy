@@ -12,9 +12,11 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
+using System.Diagnostics;
 using GBEmmy.Cartridges;
 using GBEmmy.Memory;
 using GBEmmy.Processor.Opcode;
+using GBEmmy.Registers;
 
 namespace GBEmmy.Processor
 {
@@ -28,7 +30,6 @@ namespace GBEmmy.Processor
             Memory = cartridge.GetController();
             Register = new CPURegister();
 
-            OpcodeInstruction[] table = OpcodeInstructionsTable.Base;
         }
 
         #region Properties
@@ -44,7 +45,6 @@ namespace GBEmmy.Processor
                 switch (o)
                 {
                     case Operand.A:
-                    case Operand.AF:
                     case Operand.B:
                     case Operand.Byte:
                     case Operand.C:
@@ -60,6 +60,7 @@ namespace GBEmmy.Processor
                     case Operand.MemoryC:
                         return GetByte(o);
                     case Operand.BC:
+                    case Operand.AF:
                     case Operand.DE:
                     case Operand.HL:
                     case Operand.SP:
@@ -75,7 +76,6 @@ namespace GBEmmy.Processor
                 switch (o)
                 {
                     case Operand.A:
-                    case Operand.AF:
                     case Operand.B:
                     case Operand.Byte:
                     case Operand.C:
@@ -92,6 +92,7 @@ namespace GBEmmy.Processor
                         SetByte(o, (byte) value);
                         break;
                     case Operand.BC:
+                    case Operand.AF:
                     case Operand.DE:
                     case Operand.HL:
                     case Operand.SP:
@@ -115,8 +116,6 @@ namespace GBEmmy.Processor
             {
                 case Operand.A:
                     return Register.A;
-                case Operand.AF:
-                    throw new NotImplementedException(); //?
                 case Operand.B:
                     return Register.B;
                 case Operand.Byte:
@@ -155,8 +154,6 @@ namespace GBEmmy.Processor
             {
                 case Operand.A:
                     return Register.A = value;
-                case Operand.AF:
-                    throw new NotImplementedException(); //?
                 case Operand.B:
                     return Register.B = value;
                 case Operand.Byte:
@@ -203,6 +200,8 @@ namespace GBEmmy.Processor
                     return !Register.Flags.HasFlag(Flags.Carry);
                 case Operand.NotZero:
                     return !Register.Flags.HasFlag(Flags.Zero);
+                case Operand.Zero:
+                    return Register.Flags.HasFlag(Flags.Zero);
                 case Operand.None:
                     return true;
                 default:
@@ -246,6 +245,8 @@ namespace GBEmmy.Processor
                     return (ushort) ((Register.D << 8) | Register.E);
                 case Operand.HL:
                     return (ushort) ((Register.H << 8) | Register.L);
+                case Operand.AF:
+                    return (ushort)((Register.A << 8) | (byte)Register.Flags);
                 case Operand.SP:
                     return Register.SP;
                 case Operand.SignedByte:
@@ -274,6 +275,10 @@ namespace GBEmmy.Processor
                     Register.H = (byte) (value >> 8);
                     Register.L = (byte) value;
                     break;
+                case Operand.AF:
+                    Register.A = (byte)(value >> 8);
+                    Register.Flags = (Flags)(byte)value;
+                    break;
                 case Operand.SP:
                     Register.SP = value;
                     return;
@@ -299,7 +304,10 @@ namespace GBEmmy.Processor
 
                 int instrid = Memory[addr];
 
-                _cycles -= (addr == 0xCB
+
+
+                //Debug.WriteLine("C: {0} > {1}", addr, instrid);
+                _cycles -= (instrid == 0xCB
                     ? OpcodeInstructionsTable.Cb[Memory[Register.PC++]]
                     : OpcodeInstructionsTable.Base[instrid]).Call(this);
 
