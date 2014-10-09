@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GBEmmy.Emulator.Processor
 {
-    public partial class Z80
+    public static class OpcodeTable
     {
     }
 }

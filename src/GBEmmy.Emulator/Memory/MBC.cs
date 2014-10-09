@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GBEmmy.Emulator.Processor
+namespace GBEmmy.Emulator.Memory
 {
-    public partial class Z80
+    public abstract class MBC
     {
     }
 }

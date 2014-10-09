@@ -44,10 +44,19 @@
     <Compile Include="Cartridges\CartridgeType.cs" />
     <Compile Include="GameBoy.cs" />
     <Compile Include="Memory\Bank.cs" />
+    <Compile Include="Memory\MBC.cs" />
+    <Compile Include="Processor\Flags.cs" />
+    <Compile Include="Processor\Opcode.cs" />
+    <Compile Include="Processor\OpcodeTable.cs" />
     <Compile Include="Processor\Z80.cs" />
+    <Compile Include="Processor\Z80.flags.cs">
+      <DependentUpon>Z80.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Processor\Z80.registers.cs">
+      <DependentUpon>Z80.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
