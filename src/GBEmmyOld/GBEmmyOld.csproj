@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DD9DF694-1975-4533-B941-D34874F33030}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GBEmmy</RootNamespace>
+    <AssemblyName>GBEmmyOld</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cartridges\Cartridge.cs" />
+    <Compile Include="Cartridges\CartridgeStream.cs" />
+    <Compile Include="Cartridges\CartridgeType.cs" />
+    <Compile Include="Clock.cs" />
+    <Compile Include="GameBoy.cs" />
+    <Compile Include="Memory\MBC.cs" />
+    <Compile Include="Memory\MBC1.cs" />
+    <Compile Include="Memory\Bank.cs" />
+    <Compile Include="Processor\Opcode\OpcodeInstruction.cs" />
+    <Compile Include="Processor\Opcode\OpcodeInstructionsTable.cs" />
+    <Compile Include="Processor\Opcode\Operand.cs" />
+    <Compile Include="Processor\Opcode\Operation\AdcOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\AddOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\AndOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\BitOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\CallOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\CcfOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\CplOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\CpOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\DaaOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\DecOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\DiOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\EiOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\EmptyOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\HaltOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\IncOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\IOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\JpOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\JrOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\LddOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\LdhlOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\LdhOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\LdiOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\LdOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\NopOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\OrOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\PopOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\PushOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\ResOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RetiOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RetOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RlaOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RlcaOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RlcOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RlOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RraOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RrcaOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RrcOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RrOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\RstOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SbcOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\ScfOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SetOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SraOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SlaOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SrlOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\StopOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SubOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\SwapOperation.cs" />
+    <Compile Include="Processor\Opcode\Operation\XorOperation.cs" />
+    <Compile Include="Registers\IRegister.cs" />
+    <Compile Include="Registers\LCDCRegister.cs" />
+    <Compile Include="Registers\LYRegister.cs" />
+    <Compile Include="Registers\Register.cs" />
+    <Compile Include="Registers\RegisterCollection.cs" />
+    <Compile Include="Registers\SCXRegister.cs" />
+    <Compile Include="Registers\SCYRegister.cs" />
+    <Compile Include="Registers\STATRegister.cs" />
+    <Compile Include="Registers\SVBKRegister.cs" />
+    <Compile Include="Registers\VBKRegister.cs" />
+    <Compile Include="VideoProcessor\FrameState.cs" />
+    <Compile Include="VideoProcessor\GPU.cs" />
+    <Compile Include="Processor\Z80.cs" />
+    <Compile Include="Processor\Flags.cs" />
+    <Compile Include="GameBoyDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameForm.Designer.cs">
+      <DependentUpon>GameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Processor\CPURegister.cs" />
+    <EmbeddedResource Include="GameForm.resx">
+      <DependentUpon>GameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="cpu_instrs.gb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
