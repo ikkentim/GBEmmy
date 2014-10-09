@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8AE347EF-9D46-4752-A30E-402786426861}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GBEmmy.Emulation</RootNamespace>
+    <AssemblyName>GBEmmy.Emulation</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cartridges\Cartridge.cs" />
+    <Compile Include="Cartridges\CartridgeStream.cs" />
+    <Compile Include="Cartridges\CartridgeType.cs" />
+    <Compile Include="GameBoy.cs" />
+    <Compile Include="Memory\Bank.cs" />
+    <Compile Include="Memory\MBC.cs" />
+    <Compile Include="Memory\MBC1.cs" />
+    <Compile Include="Processor\Flags.cs" />
+    <Compile Include="Processor\FlagsIndexer.cs" />
+    <Compile Include="Processor\Operations\AdcOperation.cs" />
+    <Compile Include="Processor\Operations\AddOperation.cs" />
+    <Compile Include="Processor\Operations\AndOperation.cs" />
+    <Compile Include="Processor\Operations\BitOperation.cs" />
+    <Compile Include="Processor\Operations\CallOperation.cs" />
+    <Compile Include="Processor\Operations\CcfOperation.cs" />
+    <Compile Include="Processor\Operations\CplOperation.cs" />
+    <Compile Include="Processor\Operations\CpOperation.cs" />
+    <Compile Include="Processor\Operations\DaaOperation.cs" />
+    <Compile Include="Processor\Operations\DecOperation.cs" />
+    <Compile Include="Processor\Operations\DiOperation.cs" />
+    <Compile Include="Processor\Operations\EiOperation.cs" />
+    <Compile Include="Processor\Operations\EmptyOperation.cs" />
+    <Compile Include="Processor\Operations\HaltOperation.cs" />
+    <Compile Include="Processor\Operations\IncOperation.cs" />
+    <Compile Include="Processor\Operations\IOperation.cs" />
+    <Compile Include="Processor\Opcode.cs" />
+    <Compile Include="Processor\OpcodeTable.cs" />
+    <Compile Include="Processor\Operand.cs" />
+    <Compile Include="Processor\ByteOperandIndexer.cs" />
+    <Compile Include="Processor\Operations\JpOperation.cs" />
+    <Compile Include="Processor\Operations\JrOperation.cs" />
+    <Compile Include="Processor\Operations\LddOperation.cs" />
+    <Compile Include="Processor\Operations\LdhlOperation.cs" />
+    <Compile Include="Processor\Operations\LdhOperation.cs" />
+    <Compile Include="Processor\Operations\LdiOperation.cs" />
+    <Compile Include="Processor\Operations\LdOperation.cs" />
+    <Compile Include="Processor\Operations\NopOperation.cs" />
+    <Compile Include="Processor\Operations\OrOperation.cs" />
+    <Compile Include="Processor\Operations\PopOperation.cs" />
+    <Compile Include="Processor\Operations\PushOperation.cs" />
+    <Compile Include="Processor\Operations\ResOperation.cs" />
+    <Compile Include="Processor\Operations\RetiOperation.cs" />
+    <Compile Include="Processor\Operations\RetOperation.cs" />
+    <Compile Include="Processor\Operations\RlaOperation.cs" />
+    <Compile Include="Processor\Operations\RlcaOperation.cs" />
+    <Compile Include="Processor\Operations\RlcOperation.cs" />
+    <Compile Include="Processor\Operations\RlOperation.cs" />
+    <Compile Include="Processor\Operations\RraOperation.cs" />
+    <Compile Include="Processor\Operations\RrcaOperation.cs" />
+    <Compile Include="Processor\Operations\RrcOperation.cs" />
+    <Compile Include="Processor\Operations\RrOperation.cs" />
+    <Compile Include="Processor\Operations\RstOperation.cs" />
+    <Compile Include="Processor\Operations\SbcOperation.cs" />
+    <Compile Include="Processor\Operations\ScfOperation.cs" />
+    <Compile Include="Processor\Operations\SetOperation.cs" />
+    <Compile Include="Processor\Operations\SlaOperation.cs" />
+    <Compile Include="Processor\Operations\SraOperation.cs" />
+    <Compile Include="Processor\Operations\SrlOperation.cs" />
+    <Compile Include="Processor\Operations\StopOperation.cs" />
+    <Compile Include="Processor\Operations\SubOperation.cs" />
+    <Compile Include="Processor\Operations\SwapOperation.cs" />
+    <Compile Include="Processor\Operations\XorOperation.cs" />
+    <Compile Include="Processor\RegisterPair.cs" />
+    <Compile Include="Processor\WordOperandIndexer.cs" />
+    <Compile Include="Processor\Z80.cs" />
+    <Compile Include="Processor\Z80.registers.cs">
+      <DependentUpon>Z80.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VideoProcessor\GPU.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
