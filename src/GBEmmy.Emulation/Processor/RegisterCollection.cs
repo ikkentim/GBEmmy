@@ -50,6 +50,11 @@ namespace GBEmmy.Emulation.Processor
             return _data.OfType<T>().FirstOrDefault();
         }
 
+        public Register Get(ushort address)
+        {
+            return _data[address & 0xFF];
+        }
+
         public IEnumerator<Register> GetEnumerator()
         {
             return (IEnumerator<Register>) _data.GetEnumerator();

@@ -22,6 +22,7 @@ namespace GBEmmy.Emulation.Processor
     public partial class Z80
     {
         private IE _ie;
+        private Register _if;
         private double _cycles;
 
         public ushort IFF { get; set; }
@@ -34,6 +35,7 @@ namespace GBEmmy.Emulation.Processor
             Memory = cartridge.GetController(this);
 
             _ie = Memory.Registers.Get<IE>();
+            _if = Memory.Registers.Get(RegisterAddress.IF);
 
         }
 
@@ -57,40 +59,51 @@ namespace GBEmmy.Emulation.Processor
 
             while (_cycles > 0.0)
             {
+                var debug = PC;
                 byte instrid = Memory[PC++];//read instrid
-                Debug.WriteLine("Z80: @${0:X2}: instr ${1:X2}", PC-1, instrid);
 
                 if ((IFF & 0x100) != 0)
                 {
                     IFF &= 0xFF;
                     PC--;
                 }
-                
-                _cycles -= (instrid == 0xCB
-                    ? OpcodeTable.Cb[Memory[PC++]]
-                    : OpcodeTable.Base[instrid]).Call(this);//run
 
-                if (InterruptQueue != 0)
+                var instr = (instrid == 0xCB
+                    ? OpcodeTable.Cb[Memory[PC++]]
+                    : OpcodeTable.Base[instrid]);
+
+                _cycles -= instr.Call(this);//run
+
+                Debug.WriteLine("Z80: @${0:X2}: instr ${1:X2}({2} {3},{4} / {5})", debug, instrid, instr.Operator, instr.Operand1, instr.Operand2, instr.Embedded);
+
+                _if.Value = InterruptQueue;
+                if ((IFF & 0x20) != 0)
                 {
-                    if (_ie.JoypadEnabled && (InterruptQueue & Interrupts.Joypad) != 0)
+                    IFF &= 0xDF;
+                    IFF |= 0x01;
+                }
+                else if (((IFF & 0x01) != 0) && (InterruptQueue != 0) && (_ie.Value != 0))
+                {
+                    for (int j = 0; j < 5; j++)
                     {
-                        throw new NotImplementedException();
-                    }
-                    if (_ie.LCDCEnabled && (InterruptQueue & Interrupts.LCDC) != 0)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    if (_ie.SerialEnabled && (InterruptQueue & Interrupts.Serial) != 0)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    if (_ie.TimerEnabled && (InterruptQueue & Interrupts.Timer) != 0)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    if (_ie.VBlankEnabled && (InterruptQueue & Interrupts.VBlank) != 0)
-                    {
-                        throw new NotImplementedException();
+                        if (((InterruptQueue & (1 << j)) != 0) && ((_ie.Value & (1 << j)) != 0))
+                        {
+                            if ((IFF & 0x80) != 0)
+                            {
+                                PC++;
+                                IFF &= 0x7F;
+                            }
+                            IFF &= 0x7E;
+                            InterruptQueue &= (byte)(~(1 << j));
+
+                            _if.Value &= (byte)(~(1 << j));
+
+                            Memory[--SP] = (byte)(PC >> 8);
+                            Memory[--SP] = (byte)PC;
+
+                            PC = (ushort)(0x0040 + (j << 3));
+                            break;
+                        }
                     }
                 }
             }

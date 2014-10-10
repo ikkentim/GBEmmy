@@ -81,7 +81,7 @@ namespace GBEmmy.Emulation.Processor
 
         private byte _embedded;
 
-        public string Instruction { get; private set; }
+        public string Operator { get; private set; }
         public byte Length { get; private set; }
         public byte Duration { get; private set; }
         public byte ConditionalDuration { get; private set; }
@@ -93,22 +93,20 @@ namespace GBEmmy.Emulation.Processor
 
         public Opcode(string instruction, byte length, byte duration, byte conditionalDuration=0) : this()
         {
-            Instruction = instruction;
             Length = length;
             Duration = duration;
             ConditionalDuration = conditionalDuration;
 
             var tmp = instruction.Split(' ', ',');
-            var @operator = tmp[0];
+            var name = Operator = tmp[0];
             var operands = tmp.Skip(1);
 
-
             Operation = _operators.FirstOrDefault(
-                o => o.GetType().Name.Substring(0, o.GetType().Name.Length - "Operation".Length).ToUpper() == @operator);
+                o => o.GetType().Name.Substring(0, o.GetType().Name.Length - "Operation".Length).ToUpper() == name);
             _embedded = 0;
 
-            if(operands.Any()) Operand1 = GetOperand(operands.ElementAt(0), @operator, ref _embedded);
-            if (operands.Count() == 2) Operand2 = GetOperand(operands.ElementAt(1), @operator, ref _embedded);
+            if (operands.Any()) Operand1 = GetOperand(operands.ElementAt(0), name, ref _embedded);
+            if (operands.Count() == 2) Operand2 = GetOperand(operands.ElementAt(1), name, ref _embedded);
         }
 
         private static Operand GetOperand(string name, string @operator, ref byte embedded)
