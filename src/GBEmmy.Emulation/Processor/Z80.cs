@@ -19,10 +19,18 @@ namespace GBEmmy.Emulation.Processor
 {
     public partial class Z80
     {
+
+        #region Timing
+
+        private double _cycles;
+
+        #endregion
+
         public Z80(Cartridge cartridge)
         {
             LoadRegisters();
-            throw new NotImplementedException();
+
+            Memory = cartridge.GetController();
         }
 
         public MBC Memory { get; set; }
@@ -35,6 +43,24 @@ namespace GBEmmy.Emulation.Processor
         public ushort ReadWord()
         {
             return (ushort) (Read() | (Read() << 8));
+        }
+
+
+        public void Run(double duration)
+        {
+            _cycles += (4194304.0 * 1 * duration);
+
+            while (_cycles > 0.0)
+            {
+                ushort addr = PC++;
+
+                byte instrid = Memory[addr];
+
+                //Debug.WriteLine("C: {0} > {1}", addr, instrid);
+                _cycles -= (instrid == 0xCB
+                    ? OpcodeTable.Cb[Memory[PC++]]
+                    : OpcodeTable.Base[instrid]).Call(this);
+            }
         }
     }
 }

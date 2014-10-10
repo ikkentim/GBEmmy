@@ -306,7 +306,7 @@ namespace GBEmmy.Processor
 
 
 
-                //Debug.WriteLine("C: {0} > {1}", addr, instrid);
+                Debug.WriteLine("C: {0} > {1}", addr, instrid);
                 _cycles -= (instrid == 0xCB
                     ? OpcodeInstructionsTable.Cb[Memory[Register.PC++]]
                     : OpcodeInstructionsTable.Base[instrid]).Call(this);

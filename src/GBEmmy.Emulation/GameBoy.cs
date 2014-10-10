@@ -25,13 +25,13 @@ namespace GBEmmy.Emulation
         public GameBoy(Z80 processor, GPU videoProcessor)
         {
             Processor = processor;
-            VideoProcessor = videoProcessor;
+            //VideoProcessor = videoProcessor;
         }
 
         public GameBoy(Cartridge cartridge)
         {
             Processor = new Z80(cartridge);
-            VideoProcessor = new GPU(Processor.Memory);
+            //VideoProcessor = new GPU(Processor.Memory);
         }
 
         public Z80 Processor { get; private set; }
@@ -44,7 +44,7 @@ namespace GBEmmy.Emulation
             {
                 //double duration = VideoProcessor.Run(_time);
 
-                //Processor.Run(duration);
+                Processor.Run(0.1);//(duration);
                 //_time -= duration;
             }
         }

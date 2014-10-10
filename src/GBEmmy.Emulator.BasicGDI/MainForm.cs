@@ -11,6 +11,7 @@ namespace GBEmmy.Emulator.BasicGDI
             InitializeComponent();
 
             var gb = new GameBoy(new CartridgeStream("cpu_instrs.gb").ToCartridge());
+            gb.Run();
         }
     }
 }

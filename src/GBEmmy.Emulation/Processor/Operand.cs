@@ -11,6 +11,8 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System.ComponentModel;
+
 namespace GBEmmy.Emulation.Processor
 {
     public enum Operand
