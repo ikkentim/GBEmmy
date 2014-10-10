@@ -13,6 +13,7 @@
 
 using System;
 using GBEmmy.Emulation.Memory;
+using GBEmmy.Emulation.Processor;
 
 namespace GBEmmy.Emulation.Cartridges
 {
@@ -22,7 +23,7 @@ namespace GBEmmy.Emulation.Cartridges
         {
             if (!stream.IsValid) throw new Exception("Invalid ROM");
 
-            IsGameBoyColor = stream.IsGameBoyColor;
+            IsCGB = stream.IsCGB;
             Type = stream.Type;
             RAM = stream.RAM;
             ROM = stream.ROM;
@@ -33,9 +34,9 @@ namespace GBEmmy.Emulation.Cartridges
 
         public CartridgeType Type { get; private set; }
 
-        public bool IsGameBoyColor { get; private set; }
+        public bool IsCGB { get; private set; }
 
-        public MBC GetController()
+        public MBC GetController(Z80 cpu)
         {
             switch (Type)
             {
@@ -46,7 +47,7 @@ namespace GBEmmy.Emulation.Cartridges
                 case CartridgeType.MBC1:
                 case CartridgeType.MBC1_RAM:
                 case CartridgeType.MBC1_RAM_BATT:
-                    return new MBC1(this);
+                    return new MBC1(cpu, this);
                     //                case CartridgeType.MBC2:
                     //                case CartridgeType.MBC2_BATT:
                     //                    return new MBC2(this);

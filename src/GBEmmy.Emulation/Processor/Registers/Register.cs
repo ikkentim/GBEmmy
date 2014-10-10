@@ -11,18 +11,10 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
-
-namespace GBEmmy.Emulation.Processor.Operations
+namespace GBEmmy.Emulation.Processor.Registers
 {
-    public class RetiOperation : IOperation
+    public class Register
     {
-        public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
-        {
-            cpu.PC = (ushort)(cpu.Memory[cpu.SP++] | (cpu.Memory[cpu.SP++] << 8));
-            cpu.IFF |= 0x01;
-
-            return true;
-        }
+        public virtual byte Value { get; set; }
     }
 }

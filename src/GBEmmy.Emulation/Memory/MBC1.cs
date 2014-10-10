@@ -12,6 +12,7 @@
 // For more information, please refer to <http://unlicense.org>
 
 using GBEmmy.Emulation.Cartridges;
+using GBEmmy.Emulation.Processor;
 
 namespace GBEmmy.Emulation.Memory
 {
@@ -19,8 +20,8 @@ namespace GBEmmy.Emulation.Memory
     {
         private MBC1Mode Mode = MBC1Mode.SixteenEight;
 
-        public MBC1(Cartridge cartridge)
-            : base(cartridge)
+        public MBC1(Z80 cpu, Cartridge cartridge)
+            : base(cpu, cartridge)
         {
             ROMIndex = 1;
         }

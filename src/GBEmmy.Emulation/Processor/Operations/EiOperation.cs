@@ -22,7 +22,9 @@ namespace GBEmmy.Emulation.Processor.Operations
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            throw new NotImplementedException();
+            cpu.IFF |= 0x20;
+
+            return true;
         }
     }
 }

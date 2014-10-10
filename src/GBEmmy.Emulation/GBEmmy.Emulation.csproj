@@ -46,8 +46,10 @@
     <Compile Include="Memory\Bank.cs" />
     <Compile Include="Memory\MBC.cs" />
     <Compile Include="Memory\MBC1.cs" />
+    <Compile Include="Processor\Bootrom.cs" />
     <Compile Include="Processor\Flags.cs" />
     <Compile Include="Processor\FlagsIndexer.cs" />
+    <Compile Include="Processor\Interrupts.cs" />
     <Compile Include="Processor\Operations\AdcOperation.cs" />
     <Compile Include="Processor\Operations\AddOperation.cs" />
     <Compile Include="Processor\Operations\AndOperation.cs" />
@@ -101,7 +103,14 @@
     <Compile Include="Processor\Operations\SubOperation.cs" />
     <Compile Include="Processor\Operations\SwapOperation.cs" />
     <Compile Include="Processor\Operations\XorOperation.cs" />
+    <Compile Include="Processor\RegisterAddress.cs" />
+    <Compile Include="Processor\RegisterCollection.cs" />
     <Compile Include="Processor\RegisterPair.cs" />
+    <Compile Include="Processor\Registers\DIV.cs" />
+    <Compile Include="Processor\Registers\IE.cs" />
+    <Compile Include="Processor\Registers\Register.cs" />
+    <Compile Include="Processor\Registers\TAC.cs" />
+    <Compile Include="Processor\Registers\TIMA.cs" />
     <Compile Include="Processor\WordOperandIndexer.cs" />
     <Compile Include="Processor\Z80.cs" />
     <Compile Include="Processor\Z80.registers.cs">

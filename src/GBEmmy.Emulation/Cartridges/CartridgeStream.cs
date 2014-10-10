@@ -44,7 +44,7 @@ namespace GBEmmy.Emulation.Cartridges
             }
         }
 
-        public bool IsGameBoyColor
+        public bool IsCGB
         {
             get
             {

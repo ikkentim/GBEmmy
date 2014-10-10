@@ -14,6 +14,7 @@
 using System.Threading.Tasks;
 using GBEmmy.Emulation.Cartridges;
 using GBEmmy.Emulation.Processor;
+using GBEmmy.Emulation.Processor.Registers;
 using GBEmmy.Emulation.VideoProcessor;
 
 namespace GBEmmy.Emulation
@@ -22,16 +23,20 @@ namespace GBEmmy.Emulation
     {
         private double _time;
 
+        private readonly DIV _div;
+        private readonly TIMA _tima;
         public GameBoy(Z80 processor, GPU videoProcessor)
         {
             Processor = processor;
-            //VideoProcessor = videoProcessor;
+            VideoProcessor = videoProcessor;
+
+            _div =  Processor.Memory.Registers.Get<DIV>();
+            _tima = Processor.Memory.Registers.Get<TIMA>();
         }
 
-        public GameBoy(Cartridge cartridge)
+        public GameBoy(Cartridge cartridge) : this(new Z80(cartridge), null)
         {
-            Processor = new Z80(cartridge);
-            //VideoProcessor = new GPU(Processor.Memory);
+            VideoProcessor = new GPU(Processor.Memory);
         }
 
         public Z80 Processor { get; private set; }
@@ -39,7 +44,12 @@ namespace GBEmmy.Emulation
 
         public void Update()
         {
-            _time += 0.1;
+            _time += 0.01;
+
+            //Timing:
+            _div.Update(0.01);
+            _tima.Update(0.01);
+
             while (_time > 0.0)
             {
                 //double duration = VideoProcessor.Run(_time);

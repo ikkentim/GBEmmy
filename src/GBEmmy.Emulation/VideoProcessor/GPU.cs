@@ -20,7 +20,7 @@ namespace GBEmmy.Emulation.VideoProcessor
     {
         public GPU(MBC memory)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

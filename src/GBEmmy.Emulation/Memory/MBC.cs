@@ -14,22 +14,30 @@
 using System;
 using System.Linq;
 using GBEmmy.Emulation.Cartridges;
+using GBEmmy.Emulation.Processor;
 
 namespace GBEmmy.Emulation.Memory
 {
     public abstract class MBC
     {
-        protected MBC(Cartridge cartridge)
+        private byte[] _bootrom;
+        protected MBC(Z80 cpu, Cartridge cartridge)
         {
             RAM = cartridge.RAM;
             ROM = cartridge.ROM;
             WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
             VRAM = new Bank(0x2000);
+            Registers = new RegisterCollection(cpu, cartridge.IsCGB);
+
+            _bootrom = cartridge.IsCGB && false ? Bootrom.CGB : Bootrom.DMG;//TODO: Change when implementing CGB
+            BootromEnabled = true;
+
         }
 
         public Bank[] RAM { get; private set; }
         public Bank[] ROM { get; private set; }
         public Bank VRAM { get; private set; }
+        public RegisterCollection Registers { get; private set; }
         public bool RAMEnabled { get; protected set; }
 
         public Bank[] WorkRAM { get; private set; }
@@ -37,6 +45,7 @@ namespace GBEmmy.Emulation.Memory
         public byte RAMIndex { get; set; }
         public byte ROMIndex { get; set; }
 
+        public bool BootromEnabled { get; set; }
         public byte this[ushort addr]
         {
             get { return ReadByte(addr); }
@@ -57,6 +66,11 @@ namespace GBEmmy.Emulation.Memory
 
         public virtual void WriteByte(ushort address, byte value)
         {
+            if (BootromEnabled && address < _bootrom.Length)
+            {
+                throw new Exception("Writing to bootrom is prohibited");
+            }
+
             switch (address & 0xF000)
             {
                 case 0x8000:
@@ -73,7 +87,7 @@ namespace GBEmmy.Emulation.Memory
                     break;
                 case 0xD000:
                 case 0xF000:
-                    if (address >= 0xFF00) throw new NotImplementedException("registers not implemented");
+                    if (address >= 0xFF00) Registers[address] = value;
 
                     if (address >= 0xFE00)
                     {
@@ -82,7 +96,7 @@ namespace GBEmmy.Emulation.Memory
                             throw new NotImplementedException("Sprites not implemented");
                         }
                     }
-                    else if (true) //(_svbk != null)
+                    else if (false) //(_svbk != null)
                     {
                         throw new NotImplementedException("registers not implemented");
                         //WorkRAM[_svbk.Value][address] = value;
@@ -98,6 +112,11 @@ namespace GBEmmy.Emulation.Memory
 
         public virtual byte ReadByte(ushort address)
         {
+            if (BootromEnabled && address < _bootrom.Length)
+            {
+                return _bootrom[address];
+            }
+
             switch (address & 0xF000)
             {
                 case 0x0000:
@@ -121,8 +140,7 @@ namespace GBEmmy.Emulation.Memory
                     return WorkRAM[0][address];
                 case 0xD000:
                 case 0xF000:
-                    if (address >= 0xFF00)
-                        throw new NotImplementedException("registers not impemented"); //return Registers[address];
+                    if (address >= 0xFF00) return Registers[address];
 
                     if (address >= 0xFE00)
                     {
@@ -131,7 +149,7 @@ namespace GBEmmy.Emulation.Memory
                             throw new NotImplementedException("Sprites not implemented");
                         }
                     }
-                    else if (true) //(_svbk != null)
+                    else if (false) //(_svbk != null)
                     {
                         throw new NotImplementedException("registers not implemented");
                         //WorkRAM[_svbk.Value][address] = value;
