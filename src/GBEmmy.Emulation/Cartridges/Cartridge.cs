@@ -39,30 +39,30 @@ namespace GBEmmy.Emulation.Cartridges
         {
             switch (Type)
             {
-                //                case Types.ROM:
-                //                case Types.ROM_RAM:
-                //                case Types.ROM_RAM_BATT:
-                //                    return new MBC0(this);
+                    //                case Types.ROM:
+                    //                case Types.ROM_RAM:
+                    //                case Types.ROM_RAM_BATT:
+                    //                    return new MBC0(this);
                 case CartridgeType.MBC1:
                 case CartridgeType.MBC1_RAM:
                 case CartridgeType.MBC1_RAM_BATT:
                     return new MBC1(this);
-                //                case CartridgeType.MBC2:
-                //                case CartridgeType.MBC2_BATT:
-                //                    return new MBC2(this);
-                //                case CartridgeType.MBC3:
-                //                case CartridgeType.MBC3_RAM:
-                //                case CartridgeType.MBC3_RAM_BATT:
-                //                case CartridgeType.MBC3_TIMER_BATT:
-                //                case CartridgeType.MBC3_TIMER_RAM_BATT:
-                //                    return new MBC3(this);
-                //                case CartridgeType.MBC5:
-                //                case CartridgeType.MBC5_RAM:
-                //                case CartridgeType.MBC5_RAM_BATT:
-                //                case CartridgeType.MBC5_RUMBLE:
-                //                case CartridgeType.MBC5_RUMBLE_SRAM:
-                //                case CartridgeType.MBC5_RUMBLE_SRAM_BATT:
-                //                    return new MBC5(this);
+                    //                case CartridgeType.MBC2:
+                    //                case CartridgeType.MBC2_BATT:
+                    //                    return new MBC2(this);
+                    //                case CartridgeType.MBC3:
+                    //                case CartridgeType.MBC3_RAM:
+                    //                case CartridgeType.MBC3_RAM_BATT:
+                    //                case CartridgeType.MBC3_TIMER_BATT:
+                    //                case CartridgeType.MBC3_TIMER_RAM_BATT:
+                    //                    return new MBC3(this);
+                    //                case CartridgeType.MBC5:
+                    //                case CartridgeType.MBC5_RAM:
+                    //                case CartridgeType.MBC5_RAM_BATT:
+                    //                case CartridgeType.MBC5_RUMBLE:
+                    //                case CartridgeType.MBC5_RUMBLE_SRAM:
+                    //                case CartridgeType.MBC5_RUMBLE_SRAM_BATT:
+                    //                    return new MBC5(this);
 
                 default:
                     throw new Exception(string.Format("Unsupported memory bank controller {0}", Type));

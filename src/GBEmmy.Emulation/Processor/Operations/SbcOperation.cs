@@ -11,27 +11,22 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Processor.Opcode.Operation
+namespace GBEmmy.Emulation.Processor.Operations
 {
-    internal class SbcOperation : IOperation
+    /// <summary>
+    ///     SBC operand1,operand2: subtract operand2 from operand1(always A) taking the carry flag into account.
+    /// </summary>
+    public class SbcOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.ToggleFlag(Flags.HalfCarry, (cpu.GetByte(operand1) & 0xF) - (cpu.GetByte(operand2) & 0xF) < 1);
-            cpu.ToggleFlag(Flags.Carry, cpu.GetByte(operand1) - cpu.GetByte(operand2) < 1);
+            cpu.Flags[Flags.HalfCarry] = (cpu.Bytes[operand1] & 0xF) - (cpu.Bytes[operand2] & 0xF) < 1;
+            cpu.Flags[Flags.Carry] = cpu.Bytes[operand1] - cpu.Bytes[operand2] < 1;
 
-            if (cpu.Flags[Flags.Carry])
-            {
-                cpu.ToggleFlag(Flags.Zero,
-                    (cpu.Register.A = (byte) (cpu.GetByte(operand1) - cpu.GetByte(operand2) - 1)) == 0);
-            }
-            else
-            {
-                cpu.ToggleFlag(Flags.Zero,
-                    (cpu.Register.A = (byte) (cpu.GetByte(operand1) - cpu.GetByte(operand2))) == 0);
-            }
+            cpu.Flags[Flags.Zero] =
+                (cpu.A = (byte) (cpu.Bytes[operand1] - cpu.Bytes[operand2] - (cpu.Flags[Flags.Carry] ? 1 : 0))) == 0;
 
-            cpu.ToggleFlag(Flags.Subtract, true);
+            cpu.Flags[Flags.Subtract] = true;
 
             return true;
         }

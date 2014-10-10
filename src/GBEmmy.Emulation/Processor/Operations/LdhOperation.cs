@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// LDH operand1,operand2: one of both is an $FF00|embedded-byte. Load operand2 into operand1.
+    ///     LDH operand1,operand2: one of both is an $FF00|embedded-byte. Load operand2 into operand1.
     /// </summary>
     public class LdhOperation : IOperation
     {
@@ -22,8 +22,9 @@ namespace GBEmmy.Emulation.Processor.Operations
         {
             if (operand1 == Operand.Embedded)
                 cpu.Memory[(ushort) (0xFF00 | embedded)] = cpu.Bytes[operand2];
-            else 
+            else
                 cpu.Bytes[operand2] = cpu.Memory[(ushort) (0xFF00 | embedded)];
+
             return true;
         }
     }

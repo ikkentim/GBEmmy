@@ -24,7 +24,7 @@ namespace GBEmmy.Emulation.Processor.Operations
             cpu.Flags[Flags.Subtract] = false;
             cpu.Flags[Flags.HalfCarry] = true;
             cpu.Flags[Flags.Carry] = false;
-            
+
             return true;
         }
     }

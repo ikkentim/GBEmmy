@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// NOP: Do nothing.
+    ///     NOP: Do nothing.
     /// </summary>
     public class NopOperation : IOperation
     {

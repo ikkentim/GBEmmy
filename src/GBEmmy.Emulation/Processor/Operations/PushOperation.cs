@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// PUSH operand1: Push operand1 to the stack.
+    ///     PUSH operand1: Push operand1 to the stack.
     /// </summary>
     public class PushOperation : IOperation
     {

@@ -20,11 +20,12 @@ namespace GBEmmy.Emulation.Processor.Operations
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            var dest = cpu.ReadWord();
+            ushort dest = cpu.ReadWord();
 
-            if (cpu.IsAssertion(operand1) &&!cpu.Flags[(operand1)]) return false;
- 
+            if (cpu.IsAssertion(operand1) && !cpu.Flags[(operand1)]) return false;
+
             cpu.PC = dest;
+
             return true;
         }
     }

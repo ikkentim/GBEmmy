@@ -14,13 +14,13 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// LDHL SP,r8: increase the SP-register by the sbyte.
+    ///     LDHL SP,r8: increase the SP-register by the sbyte.
     /// </summary>
     public class LdhlOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            sbyte offset = (sbyte) cpu.Read();
+            var offset = (sbyte) cpu.Read();
             int temp = cpu.SP + offset;
 
             cpu.Flags.Reset();

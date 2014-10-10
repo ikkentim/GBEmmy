@@ -138,6 +138,7 @@ namespace GBEmmy.Emulation.Processor
                     return false;
             }
         }
+
         private void LoadRegisters()
         {
             Flags = new FlagsIndexer(this);

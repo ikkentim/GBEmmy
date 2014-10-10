@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// SWAP operand1: Swap both halfs of operand1.
+    ///     SWAP operand1: Swap both halfs of operand1.
     /// </summary>
     public class SwapOperation : IOperation
     {

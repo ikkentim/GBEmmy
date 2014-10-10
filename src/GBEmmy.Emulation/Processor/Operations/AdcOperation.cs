@@ -26,6 +26,7 @@ namespace GBEmmy.Emulation.Processor.Operations
             int temp = cpu.Bytes[operand1] + cpu.Bytes[operand2] + carry;
             cpu.Flags[Flags.Carry] = temp > 0xFF;
             cpu.Flags[Flags.Zero] = (cpu.Bytes[operand1] = (byte) temp) == 0;
+
             return true;
         }
     }

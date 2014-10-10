@@ -11,13 +11,17 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Processor.Opcode.Operation
+namespace GBEmmy.Emulation.Processor.Operations
 {
+    /// <summary>
+    ///     SET 0-7,operand2: Set bit operand1 in operand2.
+    /// </summary>
     public class SetOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.SetByte(operand2, (byte) (cpu.GetByte(operand2) | (1 << embedded)));
+            cpu.Bytes[operand2] |= (byte) (1 << embedded);
+
             return true;
         }
     }

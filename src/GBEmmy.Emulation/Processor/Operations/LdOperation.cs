@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// LD operand1,operand2: Load operand2 into operand1.
+    ///     LD operand1,operand2: Load operand2 into operand1.
     /// </summary>
     public class LdOperation : IOperation
     {

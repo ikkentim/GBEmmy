@@ -16,7 +16,7 @@ using System;
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// HALT: Waits for an interupt or reset.
+    ///     HALT: Waits for an interupt or reset.
     /// </summary>
     public class HaltOperation : IOperation
     {

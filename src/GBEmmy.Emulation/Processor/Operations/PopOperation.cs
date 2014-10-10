@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// POP operand1: Pop a word from the stack and write it to operand1.
+    ///     POP operand1: Pop a word from the stack and write it to operand1.
     /// </summary>
     public class PopOperation : IOperation
     {

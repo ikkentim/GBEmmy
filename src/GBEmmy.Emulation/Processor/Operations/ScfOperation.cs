@@ -11,15 +11,18 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Processor.Opcode.Operation
+namespace GBEmmy.Emulation.Processor.Operations
 {
-    internal class ScfOperation : IOperation
+    /// <summary>
+    ///     SCF: Switch on the carry flag.
+    /// </summary>
+    public class ScfOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.ToggleFlag(Flags.Subtract, false);
-            cpu.ToggleFlag(Flags.HalfCarry, false);
-            cpu.ToggleFlag(Flags.Carry, true);
+            cpu.Flags[Flags.Subtract] = false;
+            cpu.Flags[Flags.HalfCarry] = false;
+            cpu.Flags[Flags.Carry] = true;
 
             return true;
         }

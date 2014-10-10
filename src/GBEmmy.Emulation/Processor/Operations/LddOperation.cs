@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// LDD operand1,operand2: load operand2 into operand1 and decrease the HL register by 1.
+    ///     LDD operand1,operand2: load operand2 into operand1 and decrease the HL register by 1.
     /// </summary>
     public class LddOperation : IOperation
     {

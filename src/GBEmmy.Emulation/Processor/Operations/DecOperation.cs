@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// DEC operand1: Decrease operand1s value by 1.
+    ///     DEC operand1: Decrease operand1s value by 1.
     /// </summary>
     public class DecOperation : IOperation
     {
@@ -22,10 +22,9 @@ namespace GBEmmy.Emulation.Processor.Operations
         {
             if (cpu.IsByte(operand1))
             {
-                var result = --cpu.Bytes[operand1];
-                cpu.Flags[Flags.Zero] = result == 0;
-                cpu.Flags[Flags.HalfCarry] = (result ^ 0xF) == 0;
-                cpu.Flags[Flags.Subtract] = result == 0;
+                cpu.Flags[Flags.Zero] = --cpu.Bytes[operand1] == 0;
+                cpu.Flags[Flags.HalfCarry] = (cpu.Bytes[operand1] ^ 0xF) == 0;
+                cpu.Flags[Flags.Subtract] = cpu.Bytes[operand1] == 0;
             }
             else
             {

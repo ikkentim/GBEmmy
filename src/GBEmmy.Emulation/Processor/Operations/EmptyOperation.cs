@@ -16,7 +16,7 @@ using System;
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// Placeholder for empty operations, raises exception when called uppon.
+    ///     Placeholder for empty operations, raises exception when called uppon.
     /// </summary>
     public class EmptyOperation : IOperation
     {

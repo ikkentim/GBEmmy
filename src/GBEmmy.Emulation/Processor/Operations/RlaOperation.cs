@@ -14,16 +14,17 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// RLA: Rotate the A-register left by one trough the C flag.
+    ///     RLA: Rotate the A-register left by one trough the C flag.
     /// </summary>
     public class RlaOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             int carry = (cpu.A & 0x80);
-            cpu.A = (byte)((cpu.A << 1) | (cpu.Flags[Flags.Carry] ? 1 : 0));
+            cpu.A = (byte) ((cpu.A << 1) | (cpu.Flags[Flags.Carry] ? 1 : 0));
             cpu.Flags.Reset();
             cpu.Flags[Flags.Carry] = (carry != 0);
+
             return true;
         }
     }

@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// LDD operand1,operand2: load operand2 into operand1 and increase the HL register by 1.
+    ///     LDD operand1,operand2: load operand2 into operand1 and increase the HL register by 1.
     /// </summary>
     public class LdiOperation : IOperation
     {
@@ -22,6 +22,7 @@ namespace GBEmmy.Emulation.Processor.Operations
         {
             cpu.Bytes[operand1] = cpu.Bytes[operand2];
             cpu.HL++;
+
             return true;
         }
     }

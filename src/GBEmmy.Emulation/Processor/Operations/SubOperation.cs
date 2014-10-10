@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// SUB operand1: Subtract operand1 from the A-register.
+    ///     SUB operand1: Subtract operand1 from the A-register.
     /// </summary>
     public class SubOperation : IOperation
     {

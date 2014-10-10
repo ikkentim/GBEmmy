@@ -13,11 +13,14 @@
 
 namespace GBEmmy.Emulation.Processor.Operations
 {
+    /// <summary>
+    ///     RLCA: Rotate the A-register left by one, moving bit 7 to bit 0 and the carry flag.
+    /// </summary>
     public class RlcaOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.A = (byte)((cpu.A << 1) | (cpu.A >> 7));
+            cpu.A = (byte) ((cpu.A << 1) | (cpu.A >> 7));
             cpu.Flags.Reset();
             cpu.Flags[Flags.Carry] = (cpu.A & 0x01) != 0;
 

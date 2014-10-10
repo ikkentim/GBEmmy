@@ -22,7 +22,7 @@ namespace GBEmmy.Emulation.Processor.Operations
         {
             cpu.Flags[Flags.Zero] = cpu.A == cpu.Bytes[operand1];
             cpu.Flags[Flags.Subtract] = true;
-            cpu.Flags[Flags.HalfCarry]= (cpu.A & 0xF) < (cpu.Bytes[operand1] & 0xF);
+            cpu.Flags[Flags.HalfCarry] = (cpu.A & 0xF) < (cpu.Bytes[operand1] & 0xF);
             cpu.Flags[Flags.Carry] = cpu.A < cpu.Bytes[operand1];
 
             return true;

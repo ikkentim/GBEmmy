@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// SRL operand1: Shift operand1 right by one into the carry flag.
+    ///     SRL operand1: Shift operand1 right by one into the carry flag.
     /// </summary>
     public class SrlOperation : IOperation
     {

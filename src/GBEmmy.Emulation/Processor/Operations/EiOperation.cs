@@ -15,9 +15,8 @@ using System;
 
 namespace GBEmmy.Emulation.Processor.Operations
 {
-
     /// <summary>
-    /// EI: Sets the interrupt enable (IFF).
+    ///     EI: Sets the interrupt enable (IFF).
     /// </summary>
     public class EiOperation : IOperation
     {

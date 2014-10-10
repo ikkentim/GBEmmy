@@ -14,19 +14,17 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// RET [operand1]: If operand1 is a true assertion or empty, return pop a word from the stack to the PC-register.
+    ///     RET [operand1]: If operand1 is a true assertion or empty, return pop a word from the stack to the PC-register.
     /// </summary>
     public class RetOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            if (cpu.Flags[operand1])
-            {
-                cpu.PC = (ushort) (cpu.Memory[cpu.SP++] | (cpu.Memory[cpu.SP++] << 8));
-                return true;
-            }
+            if (!cpu.Flags[operand1]) return false;
 
-            return false;
+            cpu.PC = (ushort) (cpu.Memory[cpu.SP++] | (cpu.Memory[cpu.SP++] << 8));
+
+            return true;
         }
     }
 }

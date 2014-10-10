@@ -14,7 +14,7 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// RES 0-7,operand2: Turn any bit but the one passed as operand1 off in operand2.
+    ///     RES 0-7,operand2: Turn any bit but the one passed as operand1 off in operand2.
     /// </summary>
     public class ResOperation : IOperation
     {

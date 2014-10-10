@@ -25,6 +25,7 @@ namespace GBEmmy.Emulation.Processor.Operations
             if (cpu.IsAssertion(operand1) && !cpu.Flags[(operand1)]) return false;
 
             cpu.PC += step;
+
             return true;
         }
     }

@@ -36,6 +36,7 @@ namespace GBEmmy.Emulation.Memory
 
         public byte RAMIndex { get; set; }
         public byte ROMIndex { get; set; }
+
         public byte this[ushort addr]
         {
             get { return ReadByte(addr); }
@@ -44,14 +45,14 @@ namespace GBEmmy.Emulation.Memory
 
         public byte this[byte low, byte high]
         {
-            get { return ReadByte((ushort)((high << 8) | low)); }
-            set { WriteByte((ushort)((high << 8) | low), value); }
+            get { return ReadByte((ushort) ((high << 8) | low)); }
+            set { WriteByte((ushort) ((high << 8) | low), value); }
         }
 
         public byte this[int addr]
         {
-            get { return ReadByte((ushort)addr); }
-            set { WriteByte((ushort)addr, value); }
+            get { return ReadByte((ushort) addr); }
+            set { WriteByte((ushort) addr, value); }
         }
 
         public virtual void WriteByte(ushort address, byte value)
@@ -81,7 +82,7 @@ namespace GBEmmy.Emulation.Memory
                             throw new NotImplementedException("Sprites not implemented");
                         }
                     }
-                    else if (true)//(_svbk != null)
+                    else if (true) //(_svbk != null)
                     {
                         throw new NotImplementedException("registers not implemented");
                         //WorkRAM[_svbk.Value][address] = value;
@@ -114,13 +115,14 @@ namespace GBEmmy.Emulation.Memory
                     return VRAM[address];
                 case 0xA000:
                 case 0xB000:
-                    return RAMEnabled ? RAM[RAMIndex][address] : (byte)0x00;
+                    return RAMEnabled ? RAM[RAMIndex][address] : (byte) 0x00;
                 case 0xC000:
                 case 0xE000:
                     return WorkRAM[0][address];
                 case 0xD000:
                 case 0xF000:
-                    if (address >= 0xFF00) throw new NotImplementedException("registers not impemented"); //return Registers[address];
+                    if (address >= 0xFF00)
+                        throw new NotImplementedException("registers not impemented"); //return Registers[address];
 
                     if (address >= 0xFE00)
                     {
@@ -129,7 +131,7 @@ namespace GBEmmy.Emulation.Memory
                             throw new NotImplementedException("Sprites not implemented");
                         }
                     }
-                    else if (true)//(_svbk != null)
+                    else if (true) //(_svbk != null)
                     {
                         throw new NotImplementedException("registers not implemented");
                         //WorkRAM[_svbk.Value][address] = value;

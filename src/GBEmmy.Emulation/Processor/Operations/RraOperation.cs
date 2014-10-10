@@ -11,22 +11,26 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Processor.Opcode.Operation
+namespace GBEmmy.Emulation.Processor.Operations
 {
-    internal class RraOperation : IOperation
+    /// <summary>
+    ///     RRA: Rotate the A-register right trough the carry flag
+    /// </summary>
+    public class RraOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             if (cpu.Flags[Flags.Carry])
             {
-                cpu.ResetFlags();
-                cpu.ToggleFlag(Flags.Carry, (cpu.GetByte(Operand.A) & 0x01) != 0);
-                cpu.SetByte(Operand.A, (byte) ((cpu.GetByte(Operand.A) >> 1) | 0x80));
+                cpu.Flags.Reset();
+                cpu.Flags[Flags.Carry] = (cpu.A & 0x01) != 0;
+                cpu.A = (byte) ((cpu.A >> 1) | 0x80);
             }
             else
             {
-                cpu.ToggleFlag(Flags.Carry, (cpu.GetByte(Operand.A) & 0x01) != 0);
-                cpu.SetByte(Operand.A, (byte) (cpu.GetByte(Operand.A) >> 1));
+                cpu.Flags.Reset();
+                cpu.Flags[Flags.Carry] = (cpu.A & 0x01) != 0;
+                cpu.A >>= 1;
             }
 
             return true;

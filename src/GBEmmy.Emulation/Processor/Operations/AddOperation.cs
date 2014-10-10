@@ -36,6 +36,7 @@ namespace GBEmmy.Emulation.Processor.Operations
                 cpu.Flags[Flags.HalfCarry] = (cpu.Words[operand1] & 0xFFF) + (cpu.Words[operand2] & 0xFFF) > 0xFFF;
                 cpu.Words[operand1] = (ushort) temp;
             }
+
             return true;
         }
     }

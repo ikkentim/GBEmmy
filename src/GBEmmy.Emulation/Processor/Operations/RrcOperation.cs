@@ -11,22 +11,24 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Processor.Opcode.Operation
+namespace GBEmmy.Emulation.Processor.Operations
 {
+    /// <summary>
+    ///     RRC operand1: Rotate operand1 right by one, moving bit 0 to bit 7 and the carry flag.
+    /// </summary>
     public class RrcOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.ToggleFlag(Flags.Carry, (cpu.GetByte(operand1) & 0x01) != 0);
+            cpu.Flags.Reset();
+            cpu.Flags[Flags.Carry] = (cpu.Bytes[operand1] & 0x01) != 0;
 
             if (cpu.Flags[Flags.Carry])
-                cpu.SetByte(operand1, (byte) ((cpu.GetByte(operand1) >> 1) | 0x80));
+                cpu.Bytes[operand1] = (byte) ((cpu.Bytes[operand1] >> 1) | 0x80);
             else
-                cpu.SetByte(operand1, (byte) (cpu.GetByte(operand1) >> 1));
+                cpu.Bytes[operand1] >>= 1;
 
-            cpu.ToggleFlag(Flags.Zero, cpu.GetByte(operand1) == 0);
-            cpu.ToggleFlag(Flags.Subtract, false);
-            cpu.ToggleFlag(Flags.HalfCarry, false);
+            cpu.Flags[Flags.Zero] = cpu.Bytes[operand1] == 0;
 
             return true;
         }

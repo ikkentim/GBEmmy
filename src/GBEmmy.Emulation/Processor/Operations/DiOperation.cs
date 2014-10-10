@@ -16,14 +16,13 @@ using System;
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// DI: Resets the interrupt enable (IFF).
+    ///     DI: Resets the interrupt enable (IFF).
     /// </summary>
     public class DiOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             throw new NotImplementedException();
-            return true;
         }
     }
 }

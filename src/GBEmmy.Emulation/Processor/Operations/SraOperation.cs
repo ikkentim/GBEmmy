@@ -14,14 +14,14 @@
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
-    /// SRA operand1: Shift operand1 right by one into the carry flag, copy bit 6 into 7.
+    ///     SRA operand1: Shift operand1 right by one into the carry flag, copy bit 6 into 7.
     /// </summary>
     public class SraOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             cpu.Flags[Flags.Carry] = (cpu.Bytes[operand1] & 0x01) != 0;
-            cpu.Bytes[operand1] = (byte)((cpu.Bytes[operand1] & 0x80) | (cpu.Bytes[operand1] >> 1));
+            cpu.Bytes[operand1] = (byte) ((cpu.Bytes[operand1] & 0x80) | (cpu.Bytes[operand1] >> 1));
             cpu.Flags[Flags.Zero] = cpu.Bytes[operand1] == 0;
             cpu.Flags[Flags.Subtract] = false;
             cpu.Flags[Flags.HalfCarry] = false;

@@ -11,15 +11,18 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-namespace GBEmmy.Processor.Opcode.Operation
+namespace GBEmmy.Emulation.Processor.Operations
 {
-    internal class RstOperation : IOperation
+    /// <summary>
+    ///     RST embedded: Store the PC to the stack and return to the embedded address.
+    /// </summary>
+    public class RstOperation : IOperation
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.Memory[--cpu.Register.SP] = (byte) (cpu.Register.PC >> 8);
-            cpu.Memory[--cpu.Register.SP] = (byte) cpu.Register.PC;
-            cpu.Register.PC = embedded;
+            cpu.Memory[--cpu.SP] = (byte) (cpu.PC >> 8);
+            cpu.Memory[--cpu.SP] = (byte) cpu.PC;
+            cpu.PC = embedded;
 
             return true;
         }
