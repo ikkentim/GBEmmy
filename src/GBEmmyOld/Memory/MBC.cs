@@ -11,119 +11,15 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
-using System.Diagnostics;
 using System.Linq;
 using GBEmmy.Cartridges;
-using GBEmmy.Processor;
 using GBEmmy.Registers;
 
 namespace GBEmmy.Memory
 {
     public abstract class MBC
     {
-        private readonly VBKRegister _vbk = null;
-        private readonly SVBKRegister _svbk = null;
-        protected MBC(Cartridge cartridge)
-        {
-            RAM = cartridge.RAM;
-            ROM = cartridge.ROM;
-            WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
-            VRAM = new Bank(0x2000);
-            Registers = new RegisterCollection();
-
-            Registers.Set(0xFF40, new LCDCRegister());
-            Registers.Set(0xFF41, new STATRegister());
-            Registers.Set(0xFF42, new SCYRegister());
-            Registers.Set(0xFF43, new SCXRegister());
-            Registers.Set(0xFF44, new LYRegister());
-
-            if (cartridge.IsGameBoyColor)
-            {
-                Registers.Set(0xFF4F, _vbk = new VBKRegister());
-                Registers.Set(0xFF70, _svbk = new SVBKRegister());
-
-            }
-        }
-
-        public Bank[] RAM { get; private set; }
-        public Bank[] ROM { get; private set; }
-        public Bank VRAM { get; private set; }
-        public bool RAMEnabled { get; protected set; }
-
-        public RegisterCollection Registers { get; private set; }
-
-        public Bank[] WorkRAM { get; private set; }
-
-        public byte RAMIndex { get; set; }
-        public byte ROMIndex { get; set; }
-
-        public byte this[ushort addr]
-        {
-            get { return ReadByte(addr); }
-            set { WriteByte(addr, value); }
-        }
-
-        public byte this[byte high, byte low]
-        {
-            get { return ReadByte((ushort) ((high << 8) | low)); }
-            set { WriteByte((ushort) ((high << 8) | low), value); }
-        }
-
-        public byte this[int addr]
-        {
-            get { return ReadByte((ushort) addr); }
-            set { WriteByte((ushort) addr, value); }
-        }
-
-        public void LoadBIOS(byte[] bios)
-        {
-            for (int i = 0; i < bios.Length;i++)
-                this[i] = bios[i];
-        }
-        public virtual void WriteByte(ushort address, byte value)
-        {
-            switch (address & 0xF000)
-            {
-                case 0x8000:
-                case 0x9000:
-                    VRAM[address] = value;
-                    break;
-                case 0xA000:
-                case 0xB000:
-                    if ((RAM != null) && (RAMEnabled)) RAM[RAMIndex][address] = value;
-
-                    break;
-                case 0xC000:
-                case 0xE000:
-                    WorkRAM[0][address] = value;
-                    break;
-                case 0xD000:
-                case 0xF000:
-                    if (address >= 0xFF00) Registers[address] = value;
-
-                    if (address >= 0xFE00)
-                    {
-                        if (address < 0xFEA0)
-                        {
-                            //throw new NotImplementedException("Sprites not implemented");
-                        }
-                    }
-                    else if (_svbk != null)
-                    {
-                        WorkRAM[_svbk.Value][address] = value;
-                    }
-                    else
-                    {
-                        WorkRAM[1][address] = value;
-                    }
-                    break;
-            }
-        }
-
-        private bool _inBios = true;
-
-        private int[] _bios = new[]
+        private readonly int[] _bios =
         {
             /*0x31, 0xfe, 0xff, 0xaf, 0x21, 0xff, 0x9f, 0x32, 0xcb, 0x7c, 0x20, 0xfb, 0x21, 0x26, 0xff, 0x0e, 0x11, 0x3e,
             0x80, 0x32, 0xe2, 0x0c, 0x3e, 0xf3, 0xe2, 0x32, 0x3e, 0x77, 0x77, 0x3e, 0xfc, 0xe0, 0x47, 0x11, 0x04, 0x01,
@@ -268,8 +164,109 @@ namespace GBEmmy.Memory
             0xff, 0x7f, 0x3f, 0x03, 0x93, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x7f, 0x03, 0xff, 0x7f, 0xff, 0x7f,
             0x8c, 0x7e, 0x00, 0x7c, 0x00, 0x00, 0xff, 0x7f, 0xef, 0x1b, 0x80, 0x61, 0x00, 0x00, 0xff, 0x7f, 0x00, 0x7c,
             0xe0, 0x03, 0x1f, 0x7c, 0x1f, 0x00, 0xff, 0x03, 0x40, 0x41, 0x42, 0x20, 0x21, 0x22, 0x80, 0x81, 0x82, 0x10,
-            0x11, 0x12, 0x12, 0xb0, 0x79, 0xb8, 0xad, 0x16, 0x17, 0x07, 0xba, 0x05, 0x7c, 0x13, 0x00, 0x00, 0x00, 0x00,
+            0x11, 0x12, 0x12, 0xb0, 0x79, 0xb8, 0xad, 0x16, 0x17, 0x07, 0xba, 0x05, 0x7c, 0x13, 0x00, 0x00, 0x00, 0x00
         };
+
+        private readonly SVBKRegister _svbk;
+        private readonly VBKRegister _vbk;
+        private bool _inBios = true;
+
+        protected MBC(Cartridge cartridge)
+        {
+            RAM = cartridge.RAM;
+            ROM = cartridge.ROM;
+            WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
+            VRAM = new Bank(0x2000);
+            Registers = new RegisterCollection();
+
+            Registers.Set(0xFF40, new LCDCRegister());
+            Registers.Set(0xFF41, new STATRegister());
+            Registers.Set(0xFF42, new SCYRegister());
+            Registers.Set(0xFF43, new SCXRegister());
+            Registers.Set(0xFF44, new LYRegister());
+
+            if (cartridge.IsGameBoyColor)
+            {
+                Registers.Set(0xFF4F, _vbk = new VBKRegister());
+                Registers.Set(0xFF70, _svbk = new SVBKRegister());
+            }
+        }
+
+        public Bank[] RAM { get; private set; }
+        public Bank[] ROM { get; private set; }
+        public Bank VRAM { get; private set; }
+        public bool RAMEnabled { get; protected set; }
+
+        public RegisterCollection Registers { get; private set; }
+
+        public Bank[] WorkRAM { get; private set; }
+
+        public byte RAMIndex { get; set; }
+        public byte ROMIndex { get; set; }
+
+        public byte this[ushort addr]
+        {
+            get { return ReadByte(addr); }
+            set { WriteByte(addr, value); }
+        }
+
+        public byte this[byte high, byte low]
+        {
+            get { return ReadByte((ushort) ((high << 8) | low)); }
+            set { WriteByte((ushort) ((high << 8) | low), value); }
+        }
+
+        public byte this[int addr]
+        {
+            get { return ReadByte((ushort) addr); }
+            set { WriteByte((ushort) addr, value); }
+        }
+
+        public void LoadBIOS(byte[] bios)
+        {
+            for (int i = 0; i < bios.Length; i++)
+                this[i] = bios[i];
+        }
+
+        public virtual void WriteByte(ushort address, byte value)
+        {
+            switch (address & 0xF000)
+            {
+                case 0x8000:
+                case 0x9000:
+                    VRAM[address] = value;
+                    break;
+                case 0xA000:
+                case 0xB000:
+                    if ((RAM != null) && (RAMEnabled)) RAM[RAMIndex][address] = value;
+
+                    break;
+                case 0xC000:
+                case 0xE000:
+                    WorkRAM[0][address] = value;
+                    break;
+                case 0xD000:
+                case 0xF000:
+                    if (address >= 0xFF00) Registers[address] = value;
+
+                    if (address >= 0xFE00)
+                    {
+                        if (address < 0xFEA0)
+                        {
+                            //throw new NotImplementedException("Sprites not implemented");
+                        }
+                    }
+                    else if (_svbk != null)
+                    {
+                        WorkRAM[_svbk.Value][address] = value;
+                    }
+                    else
+                    {
+                        WorkRAM[1][address] = value;
+                    }
+                    break;
+            }
+        }
 
         public virtual byte ReadByte(ushort address)
         {
@@ -279,10 +276,7 @@ namespace GBEmmy.Memory
                 {
                     return (byte) _bios[address];
                 }
-                else
-                {
-                    _inBios = false;
-                }
+                _inBios = false;
             }
 
             switch (address & 0xF000)

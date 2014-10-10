@@ -11,7 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
 using GBEmmy.Emulation.Memory;
 
 namespace GBEmmy.Emulation.VideoProcessor

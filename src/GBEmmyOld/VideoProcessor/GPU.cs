@@ -11,7 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System.Runtime.InteropServices;
 using GBEmmy.Memory;
 using GBEmmy.Registers;
 using GBEmmy.VideoProcessor;
@@ -20,7 +19,6 @@ namespace GBEmmy
 {
     public class GPU
     {
-        private readonly MBC _memory;
         public const byte Height = 144;
         public const byte Width = 160;
 
@@ -34,11 +32,13 @@ namespace GBEmmy
 
         private readonly LCDCRegister _lcdc;
         private readonly LYRegister _ly;
+        private readonly MBC _memory;
         private readonly SCXRegister _scx;
         private readonly SCYRegister _scy;
         private readonly STATRegister _stat;
 
         private readonly TileMap[] _tileMaps;
+        public uint[] ScreenBuffer = new uint[Width*Height];
 
         private double _timeBuffer;
 
@@ -53,8 +53,6 @@ namespace GBEmmy
             _scx = memory.Registers.Get<SCXRegister>();
             _scy = memory.Registers.Get<SCYRegister>();
         }
-
-        public uint[] ScreenBuffer = new uint[Width * Height];
 
         private void RenderBackgroundToScreenBuffer(byte line)
         {
@@ -78,9 +76,9 @@ namespace GBEmmy
                     //idx of tile on map
                     var idx = (ushort) ((mapY/Tile.Height)*TileMap.Width + (mapX/Tile.Width));
 
-                    var tile = map[idx];
+                    Tile tile = map[idx];
 
-                    var c = tile.GetPixel(_memory, (byte)(mapX%Tile.Width), (byte)(mapY%Tile.Height));
+                    uint c = tile.GetPixel(_memory, (byte) (mapX%Tile.Width), (byte) (mapY%Tile.Height));
                     ScreenBuffer[_ly.Line*Width + x] = c;
                 }
                 //...
@@ -190,15 +188,15 @@ namespace GBEmmy
         }
 
         public ushort Address { get; private set; }
-        
+
         public uint GetPixel(MBC memory, byte x, byte y)
         {
-            var l = memory[Address + y * 2];
-            var r = memory[Address + y * 2 + 1];
+            byte l = memory[Address + y*2];
+            byte r = memory[Address + y*2 + 1];
 
-            var c = ((l >> x) << 1 | (r >> x));
+            int c = ((l >> x) << 1 | (r >> x));
 
-            uint[] col = new uint[] {0xFFEFFFDE, 0xFFADD794, 0xFF529273, 0xFF183442};
+            uint[] col = {0xFFEFFFDE, 0xFFADD794, 0xFF529273, 0xFF183442};
             return col[c];
         }
     }

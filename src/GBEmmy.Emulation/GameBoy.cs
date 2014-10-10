@@ -21,16 +21,16 @@ namespace GBEmmy.Emulation
 {
     public class GameBoy
     {
-        private double _time;
-
         private readonly DIV _div;
         private readonly TIMA _tima;
+        private double _time;
+
         public GameBoy(Z80 processor, GPU videoProcessor)
         {
             Processor = processor;
             VideoProcessor = videoProcessor;
 
-            _div =  Processor.Memory.Registers.Get<DIV>();
+            _div = Processor.Memory.Registers.Get<DIV>();
             _tima = Processor.Memory.Registers.Get<TIMA>();
         }
 
@@ -54,7 +54,7 @@ namespace GBEmmy.Emulation
             {
                 //double duration = VideoProcessor.Run(_time);
 
-                Processor.Run(0.1);//(duration);
+                Processor.Run(0.1); //(duration);
                 //_time -= duration;
             }
         }

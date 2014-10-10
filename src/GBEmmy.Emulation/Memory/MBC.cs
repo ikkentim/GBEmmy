@@ -20,7 +20,8 @@ namespace GBEmmy.Emulation.Memory
 {
     public abstract class MBC
     {
-        private byte[] _bootrom;
+        private readonly byte[] _bootrom;
+
         protected MBC(Z80 cpu, Cartridge cartridge)
         {
             RAM = cartridge.RAM;
@@ -29,9 +30,8 @@ namespace GBEmmy.Emulation.Memory
             VRAM = new Bank(0x2000);
             Registers = new RegisterCollection(cpu, cartridge.IsCGB);
 
-            _bootrom = cartridge.IsCGB && false ? Bootrom.CGB : Bootrom.DMG;//TODO: Change when implementing CGB
+            _bootrom = cartridge.IsCGB && false ? Bootrom.CGB : Bootrom.DMG; //TODO: Change when implementing CGB
             BootromEnabled = true;
-
         }
 
         public Bank[] RAM { get; private set; }
@@ -46,6 +46,7 @@ namespace GBEmmy.Emulation.Memory
         public byte ROMIndex { get; set; }
 
         public bool BootromEnabled { get; set; }
+
         public byte this[ushort addr]
         {
             get { return ReadByte(addr); }

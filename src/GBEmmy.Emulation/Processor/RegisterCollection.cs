@@ -11,7 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace GBEmmy.Emulation.Processor
             //Register abnormal registers
             _data[RegisterAddress.DIV & 0xFF] = new DIV();
             _data[RegisterAddress.TAC & 0xFF] = new TAC();
-            _data[RegisterAddress.TIMA & 0xFF] = new TIMA((TAC)_data[RegisterAddress.TAC & 0xFF], cpu);
+            _data[RegisterAddress.TIMA & 0xFF] = new TIMA((TAC) _data[RegisterAddress.TAC & 0xFF], cpu);
 
             if (isCGB)
             {
@@ -45,16 +44,6 @@ namespace GBEmmy.Emulation.Processor
             set { _data[address & 0xFF].Value = value; }
         }
 
-        public T Get<T>() where T : Register
-        {
-            return _data.OfType<T>().FirstOrDefault();
-        }
-
-        public Register Get(ushort address)
-        {
-            return _data[address & 0xFF];
-        }
-
         public IEnumerator<Register> GetEnumerator()
         {
             return (IEnumerator<Register>) _data.GetEnumerator();
@@ -63,6 +52,16 @@ namespace GBEmmy.Emulation.Processor
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public T Get<T>() where T : Register
+        {
+            return _data.OfType<T>().FirstOrDefault();
+        }
+
+        public Register Get(ushort address)
+        {
+            return _data[address & 0xFF];
         }
     }
 }

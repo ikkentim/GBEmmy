@@ -40,12 +40,12 @@ namespace GBEmmy.Registers
 
         public byte BackgroundTileMap
         {
-            get { return (byte)((Value >> 3) & 0x01); }
+            get { return (byte) ((Value >> 3) & 0x01); }
         }
 
         public byte TileData
         {
-            get { return (byte)((Value >> 4) & 0x01); }
+            get { return (byte) ((Value >> 4) & 0x01); }
         }
 
         public TileDataTable TileDataTable
@@ -60,13 +60,12 @@ namespace GBEmmy.Registers
 
         public byte WindowTileMap
         {
-            get { return (byte)((Value >> 6) & 0x01); }
+            get { return (byte) ((Value >> 6) & 0x01); }
         }
 
         public bool DisplayEnabled
         {
             get { return ((Value >> 7) & 0x01) != 0; }
         }
-
     }
 }

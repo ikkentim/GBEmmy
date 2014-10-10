@@ -12,11 +12,8 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text.RegularExpressions;
 using GBEmmy.Emulation.Processor.Operations;
 
 namespace GBEmmy.Emulation.Processor
@@ -25,81 +22,71 @@ namespace GBEmmy.Emulation.Processor
     {
         #region Operators
 
-        private static IOperation[] _operators = new IOperation[]
-            {
-                new NopOperation(),
-                new EmptyOperation(),
-                new LdOperation(),
-                new RlcOperation(),
-                new RrcOperation(),
-                new RlOperation(),
-                new RrOperation(),
-                new SlaOperation(),
-                new SraOperation(),
-                new SwapOperation(),
-                new SrlOperation(),
-                new BitOperation(),
-                new ResOperation(),
-                new SetOperation(),
-                new IncOperation(),
-                new DecOperation(),
-                new RlcaOperation(),
-                new AddOperation(),
-                new RrcaOperation(),
-                new AdcOperation(),
-                new StopOperation(),
-                new RlaOperation(),
-                new JrOperation(),
-                new RraOperation(),
-                new LdiOperation(),
-                new DaaOperation(),
-                new CplOperation(),
-                new LddOperation(),
-                new ScfOperation(),
-                new CcfOperation(),
-                new HaltOperation(),
-                new SubOperation(),
-                new SbcOperation(),
-                new AndOperation(),
-                new XorOperation(),
-                new OrOperation(),
-                new CpOperation(),
-                new RetOperation(),
-                new PopOperation(),
-                new JpOperation(),
-                new CallOperation(),
-                new PushOperation(),
-                new RstOperation(),
-                new RetiOperation(),
-                new LdhOperation(),
-                new DiOperation(),
-                new LdhlOperation(),
-                new EiOperation()
-            };
+        private static readonly IOperation[] _operators =
+        {
+            new NopOperation(),
+            new EmptyOperation(),
+            new LdOperation(),
+            new RlcOperation(),
+            new RrcOperation(),
+            new RlOperation(),
+            new RrOperation(),
+            new SlaOperation(),
+            new SraOperation(),
+            new SwapOperation(),
+            new SrlOperation(),
+            new BitOperation(),
+            new ResOperation(),
+            new SetOperation(),
+            new IncOperation(),
+            new DecOperation(),
+            new RlcaOperation(),
+            new AddOperation(),
+            new RrcaOperation(),
+            new AdcOperation(),
+            new StopOperation(),
+            new RlaOperation(),
+            new JrOperation(),
+            new RraOperation(),
+            new LdiOperation(),
+            new DaaOperation(),
+            new CplOperation(),
+            new LddOperation(),
+            new ScfOperation(),
+            new CcfOperation(),
+            new HaltOperation(),
+            new SubOperation(),
+            new SbcOperation(),
+            new AndOperation(),
+            new XorOperation(),
+            new OrOperation(),
+            new CpOperation(),
+            new RetOperation(),
+            new PopOperation(),
+            new JpOperation(),
+            new CallOperation(),
+            new PushOperation(),
+            new RstOperation(),
+            new RetiOperation(),
+            new LdhOperation(),
+            new DiOperation(),
+            new LdhlOperation(),
+            new EiOperation()
+        };
 
         #endregion
 
-        private byte _embedded;
+        private readonly byte _embedded;
 
-        public string Operator { get; private set; }
-        public byte Length { get; private set; }
-        public byte Duration { get; private set; }
-        public byte ConditionalDuration { get; private set; }
-
-        public byte Embedded { get { return _embedded; } }
-        public IOperation Operation { get; private set; }
-        public Operand Operand1 { get; private set; }
-        public Operand Operand2 { get; private set; }
-
-        public Opcode(string instruction, byte length, byte duration, byte conditionalDuration=0) : this()
+        public Opcode(string instruction, byte length, byte duration, byte conditionalDuration = 0) : this()
         {
             Length = length;
             Duration = duration;
             ConditionalDuration = conditionalDuration;
 
-            var tmp = instruction.Split(' ', ',');
-            var name = Operator = tmp[0];
-            var operands = tmp.Skip(1);
+            string[] tmp = instruction.Split(' ', ',');
+            string name = Operator = tmp[0];
+            IEnumerable<string> operands = tmp.Skip(1);
 
             Operation = _operators.FirstOrDefault(
                 o => o.GetType().Name.Substring(0, o.GetType().Name.Length - "Operation".Length).ToUpper() == name);
@@ -108,6 +95,20 @@ namespace GBEmmy.Emulation.Processor
             if (operands.Any()) Operand1 = GetOperand(operands.ElementAt(0), name, ref _embedded);
             if (operands.Count() == 2) Operand2 = GetOperand(operands.ElementAt(1), name, ref _embedded);
         }
+
+        public string Operator { get; private set; }
+        public byte Length { get; private set; }
+        public byte Duration { get; private set; }
+        public byte ConditionalDuration { get; private set; }
+
+        public byte Embedded
+        {
+            get { return _embedded; }
+        }
+
+        public IOperation Operation { get; private set; }
+        public Operand Operand1 { get; private set; }
+        public Operand Operand2 { get; private set; }
 
         private static Operand GetOperand(string name, string @operator, ref byte embedded)
         {
@@ -127,7 +128,8 @@ namespace GBEmmy.Emulation.Processor
             Operand value;
             if (Operand.TryParse(name, true, out value))
             {
-                if (!(value == Operand.C && new[] { "JR", "JP", "CALL", "RET" }.Contains(@operator))) //These C's are C flags
+                if (!(value == Operand.C && new[] {"JR", "JP", "CALL", "RET"}.Contains(@operator)))
+                    //These C's are C flags
                     return value;
             }
 

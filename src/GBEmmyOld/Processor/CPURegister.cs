@@ -22,12 +22,11 @@ namespace GBEmmy.Processor
         public byte E;
         public Flags Flags;
         public byte H;
+        public ushort IFF;
         public byte L;
 
         public ushort PC;
         public ushort SP;
-
-        public ushort IFF;
 
         #region instruction time
 

@@ -11,8 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
-
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>

@@ -16,7 +16,6 @@ using System.Diagnostics;
 using GBEmmy.Cartridges;
 using GBEmmy.Memory;
 using GBEmmy.Processor.Opcode;
-using GBEmmy.Registers;
 
 namespace GBEmmy.Processor
 {
@@ -29,7 +28,6 @@ namespace GBEmmy.Processor
             Clock = new Clock();
             Memory = cartridge.GetController();
             Register = new CPURegister();
-
         }
 
         #region Properties
@@ -246,7 +244,7 @@ namespace GBEmmy.Processor
                 case Operand.HL:
                     return (ushort) ((Register.H << 8) | Register.L);
                 case Operand.AF:
-                    return (ushort)((Register.A << 8) | (byte)Register.Flags);
+                    return (ushort) ((Register.A << 8) | (byte) Register.Flags);
                 case Operand.SP:
                     return Register.SP;
                 case Operand.SignedByte:
@@ -276,8 +274,8 @@ namespace GBEmmy.Processor
                     Register.L = (byte) value;
                     break;
                 case Operand.AF:
-                    Register.A = (byte)(value >> 8);
-                    Register.Flags = (Flags)(byte)value;
+                    Register.A = (byte) (value >> 8);
+                    Register.Flags = (Flags) (byte) value;
                     break;
                 case Operand.SP:
                     Register.SP = value;
@@ -303,7 +301,6 @@ namespace GBEmmy.Processor
                 ushort addr = Register.PC++;
 
                 int instrid = Memory[addr];
-
 
 
                 Debug.WriteLine("C: {0} > {1}", addr, instrid);

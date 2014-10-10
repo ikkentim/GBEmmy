@@ -11,8 +11,6 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
-using System;
-
 namespace GBEmmy.Processor.Opcode.Operation
 {
     internal class DiOperation : IOperation
