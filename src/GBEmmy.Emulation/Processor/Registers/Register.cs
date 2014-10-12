@@ -16,5 +16,33 @@ namespace GBEmmy.Emulation.Processor.Registers
     public class Register
     {
         public virtual byte Value { get; set; }
+
+        public static bool operator ==(Register left, Register right)
+        {
+            return !ReferenceEquals(null, left) && left.Equals(right);
+        }
+
+        public static bool operator !=(Register left, Register right)
+        {
+            return !(left == right);
+        }
+
+        protected bool Equals(Register other)
+        {
+            return Value == other.Value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Register) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 }

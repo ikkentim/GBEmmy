@@ -13,7 +13,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using GBEmmy.Emulation.Processor.Operations;
 
 namespace GBEmmy.Emulation.Processor
@@ -170,6 +172,23 @@ namespace GBEmmy.Emulation.Processor
         public int Call(Z80 cpu)
         {
             return Operation.Call(cpu, Operand1, Operand2, Embedded) ? Duration : ConditionalDuration;
+        }
+
+        public override string ToString()
+        {
+            var em = Embedded;
+            var ops = new[] {Operand1, Operand2}.Where(o => o != Operand.None)
+                .Select(o => o == Operand.Embedded ? em.ToString() : o.GetDescription());
+            return string.Format("{0} {1}", Operator, string.Join(",", ops));
+        }
+    }
+
+    public static class OperandHelper
+    {
+        public static string GetDescription(this Enum value)
+        {
+            var a = value.GetType().GetField(value.ToString()).GetCustomAttribute<DescriptionAttribute>();
+            return a == null ? null : a.Description;
         }
     }
 }

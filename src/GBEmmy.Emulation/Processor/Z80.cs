@@ -32,6 +32,14 @@ namespace GBEmmy.Emulation.Processor
 
             _ie = Memory.Registers.Get<IE>();
             _if = Memory.Registers.Get(RegisterAddress.IF);
+
+            IFF = 0;
+            //PC = 0x100;
+            //BC = 0x0013;
+            //DE = 0x00D8;
+            //HL = 0x014D;
+            //SP = 0xFFFE;
+            //AF = 0x01B0;
         }
 
         public ushort IFF { get; set; }
@@ -59,6 +67,10 @@ namespace GBEmmy.Emulation.Processor
             while (_cycles > 0.0)
             {
                 ushort debug = PC;
+
+                if (Memory.BootromEnabled && PC == 0x100)
+                    Memory.BootromEnabled = false;
+
                 byte instrid = Memory[PC++]; //read instrid
 
                 if ((IFF & 0x100) != 0)
@@ -67,14 +79,17 @@ namespace GBEmmy.Emulation.Processor
                     PC--;
                 }
 
+
                 Opcode instr = (instrid == 0xCB
                     ? OpcodeTable.Cb[Memory[PC++]]
                     : OpcodeTable.Base[instrid]);
+                //
+                Debug.WriteLine("Z80: @${0:X2}: instr ${1:X2} \t({2} \t{3}, \t{4} \tw {5}) \t[{6:X2}, {7:X2}][[AF: {8:X4},BC: {9:X4},DE: {10:X4},HL: {11:X4}]] {12}", 
+                    
+                    debug, instrid, instr.Operator,
+                    instr.Operand1, instr.Operand2, instr.Embedded, Memory[PC], Memory[PC+1], AF, BC, DE, HL, Memory.BootromEnabled);
 
                 _cycles -= instr.Call(this); //run
-
-                Debug.WriteLine("Z80: @${0:X2}: instr ${1:X2}({2} {3},{4} / {5})", debug, instrid, instr.Operator,
-                    instr.Operand1, instr.Operand2, instr.Embedded);
 
                 _if.Value = InterruptQueue;
                 if ((IFF & 0x20) != 0)
@@ -101,6 +116,7 @@ namespace GBEmmy.Emulation.Processor
                             Memory[--SP] = (byte) (PC >> 8);
                             Memory[--SP] = (byte) PC;
 
+                            Debug.WriteLine("Jump to interrupt {0}", (1 << j));
                             PC = (ushort) (0x0040 + (j << 3));
                             break;
                         }

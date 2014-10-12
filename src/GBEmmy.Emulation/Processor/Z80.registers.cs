@@ -144,12 +144,6 @@ namespace GBEmmy.Emulation.Processor
             Flags = new FlagsIndexer(this);
             Bytes = new ByteOperandIndexer(this);
             Words = new WordOperandIndexer(this);
-
-            AF = 0x01B0;
-            BC = 0x0013;
-            DE = 0x00D8;
-            DE = 0x014D;
-            SP = 0xFFFE;
         }
     }
 }

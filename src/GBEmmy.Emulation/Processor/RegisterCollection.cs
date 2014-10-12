@@ -30,14 +30,19 @@ namespace GBEmmy.Emulation.Processor
             //Register abnormal registers
             _data[RegisterAddress.DIV & 0xFF] = new DIV();
             _data[RegisterAddress.TAC & 0xFF] = new TAC();
-            _data[RegisterAddress.TIMA & 0xFF] = new TIMA((TAC) _data[RegisterAddress.TAC & 0xFF], cpu);
+            _data[RegisterAddress.TIMA & 0xFF] = new TIMA(cpu, this);
+            _data[RegisterAddress.IE & 0xFF] = new IE();
+            _data[RegisterAddress.LCDC & 0xFF] = new LCDC();
+            _data[RegisterAddress.LY & 0xFF] = new LY();
+            _data[RegisterAddress.STAT & 0xFF] = new STAT(cpu, this);
 
+            _data[RegisterAddress.BGP & 0xFF] = new BGP();
             if (isCGB)
             {
                 //...
             }
         }
-
+        
         public byte this[ushort address]
         {
             get { return _data[address & 0xFF].Value; }

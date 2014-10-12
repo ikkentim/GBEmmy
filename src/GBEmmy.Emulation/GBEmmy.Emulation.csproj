@@ -106,9 +106,18 @@
     <Compile Include="Processor\RegisterAddress.cs" />
     <Compile Include="Processor\RegisterCollection.cs" />
     <Compile Include="Processor\RegisterPair.cs" />
+    <Compile Include="Processor\Registers\BGP.cs" />
     <Compile Include="Processor\Registers\DIV.cs" />
+    <Compile Include="Processor\Registers\DMA.cs" />
     <Compile Include="Processor\Registers\IE.cs" />
+    <Compile Include="Processor\Registers\IF.cs" />
+    <Compile Include="Processor\Registers\LCDC.cs" />
+    <Compile Include="Processor\Registers\LY.cs" />
+    <Compile Include="Processor\Registers\OBP0.cs" />
+    <Compile Include="Processor\Registers\OBP1.cs" />
+    <Compile Include="Processor\Registers\P1.cs" />
     <Compile Include="Processor\Registers\Register.cs" />
+    <Compile Include="Processor\Registers\STAT.cs" />
     <Compile Include="Processor\Registers\TAC.cs" />
     <Compile Include="Processor\Registers\TIMA.cs" />
     <Compile Include="Processor\WordOperandIndexer.cs" />
@@ -117,6 +126,7 @@
       <DependentUpon>Z80.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VideoProcessor\FrameState.cs" />
     <Compile Include="VideoProcessor\GPU.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

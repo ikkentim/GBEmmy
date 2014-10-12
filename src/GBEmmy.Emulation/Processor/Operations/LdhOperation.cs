@@ -20,10 +20,10 @@ namespace GBEmmy.Emulation.Processor.Operations
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            if (operand1 == Operand.Embedded)
-                cpu.Memory[(ushort) (0xFF00 | embedded)] = cpu.Bytes[operand2];
+            if (operand1 == Operand.MemoryByte)
+                cpu.Memory[(ushort)(0xFF00 | cpu.Bytes[operand1])] = cpu.Bytes[operand2];
             else
-                cpu.Bytes[operand2] = cpu.Memory[(ushort) (0xFF00 | embedded)];
+                cpu.Bytes[operand1] = cpu.Memory[(ushort)(0xFF00 | cpu.Bytes[operand2])];
 
             return true;
         }

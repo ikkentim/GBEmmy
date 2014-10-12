@@ -29,7 +29,6 @@ namespace GBEmmy.Emulation.Memory
             WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
             VRAM = new Bank(0x2000);
             Registers = new RegisterCollection(cpu, cartridge.IsCGB);
-
             _bootrom = cartridge.IsCGB && false ? Bootrom.CGB : Bootrom.DMG; //TODO: Change when implementing CGB
             BootromEnabled = true;
         }

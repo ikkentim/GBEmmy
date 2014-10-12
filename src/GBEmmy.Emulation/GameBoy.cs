@@ -44,18 +44,18 @@ namespace GBEmmy.Emulation
 
         public void Update()
         {
-            _time += 0.01;
+            _time += 0.001;
 
             //Timing:
-            _div.Update(0.01);
-            _tima.Update(0.01);
+            _div.Update(0.001);
+            _tima.Update(0.001);
 
             while (_time > 0.0)
             {
-                //double duration = VideoProcessor.Run(_time);
+                double duration = VideoProcessor.Run(_time);
 
-                Processor.Run(0.1); //(duration);
-                //_time -= duration;
+                Processor.Run(duration);
+                _time -= duration;
             }
         }
 

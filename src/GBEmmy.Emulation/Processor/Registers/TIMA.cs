@@ -13,16 +13,16 @@
 
 namespace GBEmmy.Emulation.Processor.Registers
 {
-    internal class TIMA : Register
+    public  class TIMA : Register
     {
         private readonly Z80 _cpu;
         private readonly TAC _tac;
 
         private double _timeSinceIncrement;
 
-        public TIMA(TAC tac, Z80 cpu)
+        public TIMA(Z80 cpu, RegisterCollection registers)
         {
-            _tac = tac;
+            _tac = registers.Get<TAC>();
             _cpu = cpu;
         }
 
