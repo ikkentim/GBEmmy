@@ -74,7 +74,6 @@ namespace GBEmmy.Emulation.Processor.Registers
                     }
                     if (ModeFlag == 3)
                     {
-                        Debug.WriteLine("CSLI");
                         CheckScanLineInterrupt();
                     }
                 }

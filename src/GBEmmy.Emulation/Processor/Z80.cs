@@ -84,6 +84,7 @@ namespace GBEmmy.Emulation.Processor
                     ? OpcodeTable.Cb[Memory[PC++]]
                     : OpcodeTable.Base[instrid]);
                 //
+                if (Memory.BootromEnabled)
                 Debug.WriteLine("Z80: @${0:X2}: instr ${1:X2} \t({2} \t{3}, \t{4} \tw {5}) \t[{6:X2}, {7:X2}][[AF: {8:X4},BC: {9:X4},DE: {10:X4},HL: {11:X4}]] {12}", 
                     
                     debug, instrid, instr.Operator,

@@ -12,6 +12,7 @@
 // For more information, please refer to <http://unlicense.org>
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using GBEmmy.Emulation.Cartridges;
 using GBEmmy.Emulation.Processor;
@@ -93,12 +94,12 @@ namespace GBEmmy.Emulation.Memory
                     {
                         if (address < 0xFEA0)
                         {
-                            throw new NotImplementedException("Sprites not implemented");
+                            //throw new NotImplementedException("Sprites not implemented");
                         }
                     }
                     else if (false) //(_svbk != null)
                     {
-                        throw new NotImplementedException("registers not implemented");
+                        throw new NotImplementedException("gbc registers not implemented");
                         //WorkRAM[_svbk.Value][address] = value;
                     }
                     else
@@ -112,6 +113,12 @@ namespace GBEmmy.Emulation.Memory
 
         public virtual byte ReadByte(ushort address)
         {
+            if (address == 0xFF50 && BootromEnabled)
+            {
+                BootromEnabled = false;
+                Debug.WriteLine("FF50 READ during bootrom");
+            }
+
             if (BootromEnabled && address < _bootrom.Length)
             {
                 return _bootrom[address];
@@ -146,7 +153,7 @@ namespace GBEmmy.Emulation.Memory
                     {
                         if (address < 0xFEA0)
                         {
-                            throw new NotImplementedException("Sprites not implemented");
+                            //throw new NotImplementedException("Sprites not implemented");
                         }
                     }
                     else if (false) //(_svbk != null)

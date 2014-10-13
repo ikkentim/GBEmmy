@@ -51,7 +51,7 @@ namespace GBEmmy.Emulation.VideoProcessor
 
             duration = FrameStateDuration[(int)_stat.State];
 
-            Debug.WriteLine("Render {0} {1}", _ly.Line, _stat.State);
+            //Debug.WriteLine("Render {0} {1}", _ly.Line, _stat.State);
 
             switch (_stat.State)
             {
