@@ -49,7 +49,8 @@ namespace GBEmmy.Emulation.Processor
                     case Operand.Zero:
                         return this[Flags.Zero];
                     case Operand.NotZero:
-                        return !this[Flags.Zero];
+                        var res = this[Flags.Zero];
+                        return !res;
                     case Operand.None:
                         return true;
                     default:

@@ -21,10 +21,12 @@ namespace GBEmmy.Emulation.Memory
 {
     public abstract class MBC
     {
+        private readonly Z80 _cpu;
         private readonly byte[] _bootrom;
 
         protected MBC(Z80 cpu, Cartridge cartridge)
         {
+            _cpu = cpu;
             RAM = cartridge.RAM;
             ROM = cartridge.ROM;
             WorkRAM = Enumerable.Repeat(new Bank(0x1000), 8).ToArray();
@@ -77,6 +79,7 @@ namespace GBEmmy.Emulation.Memory
                 case 0x8000:
                 case 0x9000:
                     VRAM[address] = value;
+                    updatetile(address, value);
                     break;
                 case 0xA000:
                 case 0xB000:
@@ -110,15 +113,20 @@ namespace GBEmmy.Emulation.Memory
             }
         }
 
+        private void updatetile(ushort addr, byte val)
+        {
+            // Get the "base address" for this tile row
+            addr &= 0x1FFE;
+
+            // Work out which tile and row was updated
+            var tile = (addr >> 4) & 511;
+            var y = (addr >> 1) & 7;
+
+            Debug.WriteLine("Update tile {0} @ {1}", tile, y);
+        }
 
         public virtual byte ReadByte(ushort address)
         {
-            if (address == 0xFF50 && BootromEnabled)
-            {
-                BootromEnabled = false;
-                Debug.WriteLine("FF50 READ during bootrom");
-            }
-
             if (BootromEnabled && address < _bootrom.Length)
             {
                 return _bootrom[address];

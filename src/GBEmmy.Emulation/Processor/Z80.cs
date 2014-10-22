@@ -11,6 +11,7 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System;
 using System.Diagnostics;
 using GBEmmy.Emulation.Cartridges;
 using GBEmmy.Emulation.Memory;
@@ -33,16 +34,19 @@ namespace GBEmmy.Emulation.Processor
             _ie = Memory.Registers.Get<IE>();
             _if = Memory.Registers.Get(RegisterAddress.IF);
 
-            IFF = 0;
-            //PC = 0x100;
-            //BC = 0x0013;
-            //DE = 0x00D8;
-            //HL = 0x014D;
-            //SP = 0xFFFE;
-            //AF = 0x01B0;
+            IME = true;
+
+            Memory.BootromEnabled = false;
+
+            PC = 0x100;
+            BC = 0x0013;
+            DE = 0x00D8;
+            HL = 0x014D;
+            SP = 0xFFFE;
+            AF = 0x01B0;
         }
 
-        public ushort IFF { get; set; }
+        public bool IME { get; set; }
 
         public byte InterruptQueue { get; set; }
 
@@ -58,7 +62,6 @@ namespace GBEmmy.Emulation.Processor
             return (ushort) (Read() | (Read() << 8));
         }
 
-
         public void Run(double duration)
         {
             //TODO: Implement double speed
@@ -69,47 +72,29 @@ namespace GBEmmy.Emulation.Processor
                 ushort debug = PC;
 
                 if (Memory.BootromEnabled && PC == 0x100)
-                    Memory.BootromEnabled = false;
-
-                byte instrid = Memory[PC++]; //read instrid
-
-                if ((IFF & 0x100) != 0)
                 {
-                    IFF &= 0xFF;
-                    PC--;
+                    Memory.BootromEnabled = false;
+                    Debug.WriteLine("QUIT bootrom");
                 }
 
+                byte instrid = Memory[PC++]; //read instrid
 
                 Opcode instr = (instrid == 0xCB
                     ? OpcodeTable.Cb[Memory[PC++]]
                     : OpcodeTable.Base[instrid]);
-                //
-                if (Memory.BootromEnabled)
-                Debug.WriteLine("Z80: @${0:X2}: instr ${1:X2} \t({2} \t{3}, \t{4} \tw {5}) \t[{6:X2}, {7:X2}][[AF: {8:X4},BC: {9:X4},DE: {10:X4},HL: {11:X4}]] {12}", 
-                    
-                    debug, instrid, instr.Operator,
-                    instr.Operand1, instr.Operand2, instr.Embedded, Memory[PC], Memory[PC+1], AF, BC, DE, HL, Memory.BootromEnabled);
+                
+                Debug.WriteLine("Z80: @${0:X2}: instr ${1} \t({2}) \t[{3:X2}, {4:X2}][[AF: {5:X4},BC: {6:X4},DE: {7:X4},HL: {8:X4}, SP:{9:X4}]]", debug, instrid, instr, Memory[PC], Memory[PC+1], AF, BC, DE, HL, SP);
 
                 _cycles -= instr.Call(this); //run
 
                 _if.Value = InterruptQueue;
-                if ((IFF & 0x20) != 0)
-                {
-                    IFF &= 0xDF;
-                    IFF |= 0x01;
-                }
-                else if (((IFF & 0x01) != 0) && (InterruptQueue != 0) && (_ie.Value != 0))
+
+                if (IME && (InterruptQueue != 0) && (_ie.Value != 0))
                 {
                     for (int j = 0; j < 5; j++)
                     {
                         if (((InterruptQueue & (1 << j)) != 0) && ((_ie.Value & (1 << j)) != 0))
                         {
-                            if ((IFF & 0x80) != 0)
-                            {
-                                PC++;
-                                IFF &= 0x7F;
-                            }
-                            IFF &= 0x7E;
                             InterruptQueue &= (byte) (~(1 << j));
 
                             _if.Value &= (byte) (~(1 << j));

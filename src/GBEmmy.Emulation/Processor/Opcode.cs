@@ -178,7 +178,7 @@ namespace GBEmmy.Emulation.Processor
         {
             var em = Embedded;
             var ops = new[] {Operand1, Operand2}.Where(o => o != Operand.None)
-                .Select(o => o == Operand.Embedded ? em.ToString() : o.GetDescription());
+                .Select(o => o == Operand.Embedded ? em.ToString("X2") : o.GetDescription());
             return string.Format("{0} {1}", Operator, string.Join(",", ops));
         }
     }

@@ -11,6 +11,7 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System.Diagnostics;
 using System.Threading.Tasks;
 using GBEmmy.Emulation.Cartridges;
 using GBEmmy.Emulation.Processor;
@@ -24,6 +25,7 @@ namespace GBEmmy.Emulation
         private readonly DIV _div;
         private readonly TIMA _tima;
         private double _time;
+        private Stopwatch _stopwatch = new Stopwatch();
 
         public GameBoy(Z80 processor, GPU videoProcessor)
         {
@@ -44,11 +46,14 @@ namespace GBEmmy.Emulation
 
         public void Update()
         {
-            _time += 0.001;
+            var elapsed = _stopwatch.Elapsed.TotalSeconds;
+
+            _stopwatch.Restart();
+            _time += elapsed;
 
             //Timing:
-            _div.Update(0.001);
-            _tima.Update(0.001);
+            _div.Update(elapsed);
+            _tima.Update(elapsed);
 
             while (_time > 0.0)
             {
@@ -61,6 +66,7 @@ namespace GBEmmy.Emulation
 
         public async void Run()
         {
+            Debug.WriteLine("INIT PC: {0}", Processor.PC);
             await Task.Run(() =>
             {
                 while (true)

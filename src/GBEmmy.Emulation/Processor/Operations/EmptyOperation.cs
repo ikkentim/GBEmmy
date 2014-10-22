@@ -22,7 +22,8 @@ namespace GBEmmy.Emulation.Processor.Operations
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            throw new Exception("Invalid operation call");
+            //throw new Exception("Invalid operation call");
+            return true;
         }
     }
 }

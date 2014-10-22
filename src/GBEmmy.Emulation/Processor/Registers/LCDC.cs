@@ -33,9 +33,9 @@ namespace GBEmmy.Emulation.Processor.Registers
             get { return (byte) ((Value >> 3) & 0x01); }
         }
 
-        public byte TileData
+        public byte TileDataTable
         {
-            get { return (byte) ((Value >> 4) & 0x01); }
+            get { return (byte) ((Value & 0x10) == 0 ? 1 : 0); }
         }
 
         public bool WindowEnabled

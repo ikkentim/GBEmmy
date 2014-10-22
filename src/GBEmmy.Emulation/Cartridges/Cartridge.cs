@@ -40,10 +40,10 @@ namespace GBEmmy.Emulation.Cartridges
         {
             switch (Type)
             {
-                    //                case Types.ROM:
-                    //                case Types.ROM_RAM:
-                    //                case Types.ROM_RAM_BATT:
-                    //                    return new MBC0(this);
+                case CartridgeType.ROM:
+                case CartridgeType.ROM_RAM:
+                case CartridgeType.ROM_RAM_BATT:
+                    return new MBC0(cpu, this);
                 case CartridgeType.MBC1:
                 case CartridgeType.MBC1_RAM:
                 case CartridgeType.MBC1_RAM_BATT:

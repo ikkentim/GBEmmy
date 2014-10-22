@@ -18,7 +18,7 @@ namespace GBEmmy.Emulation.Processor.Operations
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             cpu.PC = (ushort) (cpu.Memory[cpu.SP++] | (cpu.Memory[cpu.SP++] << 8));
-            cpu.IFF |= 0x01;
+            cpu.IME = true;
 
             return true;
         }

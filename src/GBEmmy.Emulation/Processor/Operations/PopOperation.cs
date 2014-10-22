@@ -11,6 +11,8 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System;
+
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
@@ -20,7 +22,10 @@ namespace GBEmmy.Emulation.Processor.Operations
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.Words[operand1] = (ushort) (cpu.Memory[cpu.SP++] | (cpu.Memory[cpu.SP++] << 8));
+            ushort val = (ushort)(cpu.Memory[cpu.SP++] | (cpu.Memory[cpu.SP++] << 8));
+
+            Console.WriteLine("pop {0}", val);
+            cpu.Words[operand1] = val;
 
             return true;
         }

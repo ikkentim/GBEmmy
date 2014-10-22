@@ -20,7 +20,7 @@ namespace GBEmmy.Emulation.Processor.Operations
     {
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
-            cpu.IFF |= 0x20;
+            cpu.IME = true;
 
             return true;
         }

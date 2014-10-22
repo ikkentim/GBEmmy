@@ -37,6 +37,13 @@ namespace GBEmmy.Emulation.Processor
             _data[RegisterAddress.STAT & 0xFF] = new STAT(cpu, this);
 
             _data[RegisterAddress.BGP & 0xFF] = new BGP();
+            _data[RegisterAddress.DMA & 0xFF] = new DMA(cpu);
+            _data[RegisterAddress.IF & 0xFF] = new IF(cpu);
+            _data[RegisterAddress.OBP0 & 0xFF] = new OBP0();
+            _data[RegisterAddress.OBP1 & 0xFF] = new OBP1();
+            _data[RegisterAddress.P1 & 0xFF] = new P1();
+
+
             if (isCGB)
             {
                 //...

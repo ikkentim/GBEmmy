@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +46,7 @@
     <Compile Include="GameBoy.cs" />
     <Compile Include="Memory\Bank.cs" />
     <Compile Include="Memory\MBC.cs" />
+    <Compile Include="Memory\MBC0.cs" />
     <Compile Include="Memory\MBC1.cs" />
     <Compile Include="Processor\Bootrom.cs" />
     <Compile Include="Processor\Flags.cs" />

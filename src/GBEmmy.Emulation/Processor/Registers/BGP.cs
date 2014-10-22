@@ -8,28 +8,13 @@ namespace GBEmmy.Emulation.Processor.Registers
 {
     public class BGP :Register
     {
-        public uint[] ColorArray
-        {
-            get
-            {
-                return ColorArrayProperty;
-            }
-        }
+        public uint[] Colors { get; private set; }
 
-        private readonly uint[] ColorArrayProperty = new uint[4];
-
-        public int Entries
-        {
-            get
-            {
-                return ColorArray.Length;
-            }
-        }
-
-        private readonly uint[] GreyscaleTable = new uint[] { 0x00FFFFFF, 0x00AAAAAA, 0x00666666, 0x00000000 };
+        private readonly uint[] _greyscaleTable = { 0x00FFFFFF, 0x00AAAAAA, 0x00666666, 0x00000000 };
 
         public BGP()
         {
+            Colors = new uint[4];
             Value = 0xFC;
         }
 
@@ -38,10 +23,10 @@ namespace GBEmmy.Emulation.Processor.Registers
             set
             {
                 base.Value = value;
-                for (int i = 0; i < ColorArray.Length; i++)
-                {
-                    ColorArray[i] = GreyscaleTable[((Value >> (i << 1)) & 0x03)];
-                }
+
+                for (int i = 0; i < Colors.Length; i++)
+                    Colors[i] = _greyscaleTable[((Value >> (i << 1)) & 0x03)];
+                
             }
         }
     }

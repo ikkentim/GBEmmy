@@ -9,11 +9,11 @@ namespace GBEmmy.Emulation.Processor.Registers
 {
     public class DMA : Register
     {
-        private readonly MBC _memory;
+        private readonly Z80 _cpu;
 
-        public DMA(MBC memory)
+        public DMA(Z80 cpu)
         {
-            _memory = memory;
+            _cpu = cpu;
         }
 
         public override byte Value
@@ -21,10 +21,10 @@ namespace GBEmmy.Emulation.Processor.Registers
             set
             {
                 base.Value = value;
-                var address = (value << 8);
+                var address = (ushort)(value << 8);
                 for (int i = 0; i < 0xA0; i++, address++)
                 {
-                    _memory[0xFE00 | i] = _memory[address];
+                    _cpu.Memory[0xFE00 | i] = _cpu.Memory[address];
                 }
 
             }

@@ -11,6 +11,8 @@
 // 
 // For more information, please refer to <http://unlicense.org>
 
+using System;
+
 namespace GBEmmy.Emulation.Processor.Operations
 {
     /// <summary>
@@ -21,6 +23,8 @@ namespace GBEmmy.Emulation.Processor.Operations
         public bool Call(Z80 cpu, Operand operand1, Operand operand2, byte embedded)
         {
             ushort val = cpu.Words[operand1];
+
+            Console.WriteLine("push {0}", val);
             cpu.Memory[--cpu.SP] = (byte) (val >> 8);
             cpu.Memory[--cpu.SP] = (byte) val;
 
